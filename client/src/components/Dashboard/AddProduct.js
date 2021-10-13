@@ -8,7 +8,7 @@ function AddProduct({ closeMenu }) {
       <h1> Add Product </h1>
       <form
         method="POST"
-        action="http://localhost:3500/dashboard/product"
+        action="/api/dashboard/product"
         enctype="multipart/form-data"
       >
         <input type="text" name="title" placeholder="Product Name" />

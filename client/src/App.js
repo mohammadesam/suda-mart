@@ -7,21 +7,27 @@ import ProductDetails from "./components/ProductDetails";
 import NavBar from "./components/NavBar";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
-//import Paypal from "./components/Paypal";
+import Paypal from "./components/Paypal";
 import SuccessPage from "./components/successPage";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import ProductsDashboard from "./components/Dashboard/ProductsDashboard";
 import AdminUserDashboard from "./components/Dashboard/Users";
 import NormalUser from "./components/Dashboard/NormalUser";
+import Order from "./components/Dashboard/Orders";
+import PageNotFound from "./components/PageNotFound";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { DarkDefaultTheme, DefaultTheme } from "./components/theme";
+import { useSelector } from "react-redux";
+import { getUser } from "./features/userSlice";
+import normalUserOrderDetails from "./components/normalUserOrderDetails";
+
 function App() {
   const [theme, setTheme] = useState(false);
-
+  const user = useSelector(getUser);
+  const userRole = user ? user.role : null;
   const handleThemeChange = () => {
     setTheme(!theme);
-    console.log(theme);
   };
   return (
     <div className="App">
@@ -36,22 +42,30 @@ function App() {
             <Route path="/checkout/paypal/success">
               <SuccessPage />
             </Route>
-            <Route path="/checkout/paypal/:total/">{/* <Paypal /> */}</Route>
+            <Route path="/checkout/paypal/:total/">
+              {user !== null ? <Paypal /> : <PageNotFound />}
+            </Route>
             <Route path="/checkout/:total">
               <Checkout />
             </Route>
+            <Route path="/dashboard/order">
+              {userRole === "admin" ? <Order /> : <PageNotFound />}
+            </Route>
             <Route path="/dashboard/user">
-              <AdminUserDashboard />
+              {userRole === "admin" ? <AdminUserDashboard /> : <PageNotFound />}
             </Route>
             <Route path="/dashboard/products">
-              <ProductsDashboard />
+              {userRole === "admin" ? <ProductsDashboard /> : <PageNotFound />}
             </Route>
 
-            <Route path="/dashboard/normal_user">
-              <NormalUser />
+            <Route exact path="/dashboard/normal_user">
+              {user !== null ? <NormalUser /> : <PageNotFound />}
+            </Route>
+            <Route path="/dashboard/normal_user/:id">
+              {user !== null ? <normalUserOrderDetails /> : <PageNotFound />}
             </Route>
             <Route path="/dashboard">
-              <Dashboard />
+              {userRole === "admin" ? <Dashboard /> : <PageNotFound />}
             </Route>
             <Route path="/cart">
               <NavBar changeTheme={handleThemeChange} />

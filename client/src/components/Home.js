@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "./NavBar";
+import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../features/appSlice";

@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 const paypal = require("@paypal/checkout-server-sdk");
 const userRouter = require("./routes/users");
 const dashboardRoute = require("./routes/dashboard");
+const orderRouter = require("./routes/orders");
+const cors = require("cors");
+
 const Environment =
   process.env.NODE_ENV === "production"
     ? paypal.core.LiveEnvironment
@@ -19,11 +22,14 @@ app.use((req, res, next) => {
   res.append("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
+app.use(cors());
 app.use(express.json());
 
 // routes import
-app.use("/users", userRouter);
-app.use("/dashboard", dashboardRoute);
+app.use("/api/users", userRouter);
+app.use("/api/dashboard/orders", orderRouter);
+app.use("/api/dashboard", dashboardRoute);
+
 //db
 mongoose.connect(process.env.DATA_BASE_URL, {
   useNewUrlParser: true,
@@ -42,7 +48,7 @@ app.get("/", (req, res) => {
 });
 
 // payPal order
-app.post("/makeOrder", async (req, res) => {
+app.post("/api/makeOrder", async (req, res) => {
   // request data
   const totalAmount = req.body.items.reduce(
     (sum, item) => sum + item.quantity * item.price,
@@ -54,8 +60,8 @@ app.post("/makeOrder", async (req, res) => {
   let discount = req.body.discount;
   let items = req.body.items.map((item) => {
     return {
-      name: item.name,
-      description: item.desc,
+      name: item.title,
+      description: item.description,
       unit_amount: {
         currency_code: "USD",
         value: item.price,

@@ -38,7 +38,7 @@ function Cart() {
             id={item.id}
             quantity={item.quantity}
             {...item}
-            key={item.id}
+            key={item._id}
           />
         );
       })}

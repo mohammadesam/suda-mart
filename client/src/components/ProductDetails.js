@@ -1,79 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import LoadingScreen from "./LoadingScreen";
+import ErrorPage from "./ErrorPage";
 import { useParams } from "react-router-dom";
-
-let PRODUCTS = [
-  {
-    name: "Sport shoe",
-    image: 1,
-    price: 12.99,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "red",
-    label: ["shoes", "sport"],
-  },
-
-  {
-    name: "Watch",
-    image: 2,
-    price: 82.99,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "gold",
-    label: ["accus", "clothes"],
-  },
-  {
-    name: "Shampoo",
-    image: 4,
-    price: 9.99,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "white",
-    label: ["clean", "body"],
-  },
-  {
-    name: "Blue man Perfume",
-    image: 5,
-    price: 99.75,
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "red",
-    label: ["perfume", "casual"],
-  },
-];
 
 function ProductDetails() {
   let { id } = useParams();
-  let product = PRODUCTS[id];
-  return (
-    <Container>
-      <LeftContainer>
-        <img src={`/images/product ${product.image}.jpg`} />
-      </LeftContainer>
-      <RightContainer>
-        <div>
-          <h1> {product.name} </h1>
-          <p className="desc">{product.desc}</p>
-        </div>
-        <div>
-          <p className="title"> Price </p>
-          <span>
+  let [product, setProduct] = useState(null);
+  let [loading, setLoading] = useState(true);
+  let [error, setError] = useState(false);
+
+  useEffect(() => {
+    async function getProduct() {
+      try {
+        let response = await fetch(`/api/dashboard/product/${id}`);
+        let productData = await response.json();
+        setProduct(productData);
+        console.log(product);
+        setLoading(false);
+      } catch (err) {
+        setError("some thing went wrong please try to reload the page");
+      }
+    }
+    getProduct();
+  }, []);
+
+  if (error) {
+    return <ErrorPage />;
+  } else if (loading) {
+    return <LoadingScreen />;
+  } else {
+    let buff = new Buffer.from(product.image.data.data);
+    let base64Image = buff.toString("base64");
+    return (
+      <Container>
+        <LeftContainer>
+          <img
+            src={`data:${product.image.contentType};base64,${base64Image}`}
+            alt={product.title}
+          />
+        </LeftContainer>
+        <RightContainer>
+          <div>
+            <h1> {product.title} </h1>
+            <p className="desc">{product.description}</p>
+          </div>
+          <div>
+            <p className="title"> Price </p>
+            <span>
+              {" "}
+              <strong>{product.price} $</strong>{" "}
+            </span>
+          </div>
+          <div>
             {" "}
-            <strong>{product.price} $</strong>{" "}
-          </span>
-        </div>
-        <div>
-          {" "}
-          <p className="title"> Color </p>
-          <span> {product.color} </span>
-        </div>
-        <div>
-          {" "}
-          <p className="title"> catagories </p>
-          <span> {product.label.join(" , ")} </span>
-        </div>
-        <ButtonsWarper>
-          <button> Add to Cart </button>
-        </ButtonsWarper>
-      </RightContainer>
-    </Container>
-  );
+            <p className="title"> Color </p>
+            <span> {product.color} </span>
+          </div>
+          <div>
+            {" "}
+            <p className="title"> catagories </p>
+            <span> {product.label || " "} </span>
+          </div>
+          <ButtonsWarper>
+            <button> Add to Cart </button>
+          </ButtonsWarper>
+        </RightContainer>
+      </Container>
+    );
+  }
 }
 
 export default ProductDetails;

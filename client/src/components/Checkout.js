@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/userSlice";
 let countries = ["sudan", "egypt", "Ganaa", "somaila", "UK", "US"];
 
 function Checkout() {
   let history = useHistory();
   let [address, setAddress] = useState("");
   let totalPrice = Math.floor(useParams().total * 100) / 100;
-
+  let user = useSelector(getUser);
   function makePayment(e) {
     e.preventDefault();
     history.push(`/checkout/paypal/${totalPrice}`);
@@ -20,14 +22,26 @@ function Checkout() {
   return (
     <Container>
       <h1> Check Out </h1>
+      {user ? null : (
+        <Alert>
+          {" "}
+          <span>&#9888;</span> You are not logged In !{" "}
+          <Link to="/login">Login Now</Link>{" "}
+        </Alert>
+      )}
       <form>
         <CountryDetails>
           <h3 style={{ color: "#2053cd" }}> Location Details </h3>
           <div key="10">
             <label> Country </label>
             <select>
-              {countries.map((country) => {
-                return <option value={country}> {country} </option>;
+              {countries.map((country, index) => {
+                return (
+                  <option value={country} key={index}>
+                    {" "}
+                    {country}{" "}
+                  </option>
+                );
               })}
             </select>
           </div>
@@ -57,7 +71,14 @@ function Checkout() {
             <span>total To Pay</span>{" "}
             <span className="bold"> ${totalPrice} </span>{" "}
           </div>
-          <button onClick={makePayment}> Checkout </button>
+          <button
+            disabled={!Boolean(user)}
+            className={Boolean(user) ? "" : "disabled"}
+            onClick={makePayment}
+          >
+            {" "}
+            Checkout{" "}
+          </button>
         </Sammary>
       </form>
     </Container>
@@ -78,7 +99,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-item: center;
+  align-items: center;
 
   padding: 0 0 0 7rem;
 
@@ -162,5 +183,25 @@ const Sammary = styled.div`
     &:hover {
       background: #3769df;
     }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: none;
+    }
+  }
+`;
+
+let Alert = styled.div`
+  width: 80vw;
+  background: #fe3448;
+  color: black;
+  padding: 10px;
+  margin: 20px 0;
+  font-weight: bold;
+
+  a {
+    margin: 0 5px;
+    text-decoration: underline;
+    color: white;
   }
 `;

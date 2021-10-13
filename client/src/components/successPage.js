@@ -6,7 +6,7 @@ function SuccessPage() {
     <Container>
       <h1>Payment Successfully Completed ✔</h1>
       <Link to="/products">continue shopping</Link>
-      <Link to="/account">Back to Your Account</Link>
+      <Link to="/dashboard/normal_user">Back to Your Account</Link>
     </Container>
   );
 }

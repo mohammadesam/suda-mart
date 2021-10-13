@@ -15,7 +15,7 @@ function Login({ type }) {
       <Container>
         <FormWarper>
           <h1> Login </h1>
-          <form action="http://localhost:3500/users/login" method="POST">
+          <form action="/api/users/login" method="POST">
             <div>
               <input
                 required
@@ -50,7 +50,7 @@ function Login({ type }) {
       <Container>
         <FormWarper>
           <h1>Register</h1>
-          <form action="http://localhost:3500/users/register" method="POST">
+          <form action="/api/users/register" method="POST">
             <input
               required
               type="text"

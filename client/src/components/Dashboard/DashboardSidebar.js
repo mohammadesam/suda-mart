@@ -74,6 +74,20 @@ function DashboardSidebar({ selectedId }) {
             <path d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2S7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h17z" />
           </svg>
         </div>
+        <div key="4" id="3">
+          <svg
+            onClick={(e) => handleMenuSelections(e.target, "order")}
+            aria-hidden="true"
+            id="order"
+            role="img"
+            width="35"
+            height="35"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 24 24"
+          >
+            <path d="M4 7h11v2H4zm0 4h11v2H4zm0 4h7v2H4zm15.299-2.708l-4.3 4.291l-1.292-1.291l-1.414 1.415l2.706 2.704l5.712-5.703z" />
+          </svg>
+        </div>
       </div>
     </SideBar>
   );

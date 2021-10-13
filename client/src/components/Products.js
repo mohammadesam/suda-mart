@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import { useDispatch } from "react-redux";
 import { addProducts } from "../features/productsSlice";
+import ErrorPage from "./ErrorPage";
+import LoadingScreen from "./LoadingScreen";
 let PRODUCTS = [
   {
     id: 1,
@@ -54,28 +56,44 @@ let PRODUCTS = [
 function Products() {
   let dispatch = useDispatch();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    // (function () {
-    //   // let response = await fetch("https://fakestoreapi.com/products");
-    //   // let productsList = await response.json();
-    //   // console.log(productsList);
-
-    // })();
-    dispatch(addProducts(PRODUCTS));
-    setProducts(PRODUCTS);
-    console.log("hiiio");
-  }, [products]);
+    (async function () {
+      try {
+        let response = await fetch("/api/dashboard/products");
+        console.log(response.url);
+        let productsList = await response.json();
+        setProducts(productsList);
+        dispatch(addProducts(productsList));
+        setLoading(false);
+      } catch (err) {
+        setError("ops Some thing went wrong try to reload the page");
+      }
+    })();
+  }, []);
   return (
     <Container>
-      <ProductsContainer>
-        {PRODUCTS &&
-          PRODUCTS.map((product, index) => {
-            return (
-              <ProductCard {...product} product={{ ...product }} key={index} />
-            );
-          })}
-      </ProductsContainer>
+      {!error ? (
+        loading ? (
+          <LoadingScreen />
+        ) : (
+          <ProductsContainer>
+            {products.map((product, index) => {
+              return (
+                <ProductCard
+                  {...product}
+                  product={{ ...product }}
+                  key={index}
+                />
+              );
+            })}
+          </ProductsContainer>
+        )
+      ) : (
+        <ErrorPage msg={error} />
+      )}
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getProducts } from "../../features/productsSlice";
 import styled from "styled-components";
@@ -13,6 +13,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Chip from "@material-ui/core/Chip";
 import clsx from "clsx";
+import Alert from "@material-ui/lab/Alert";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogActions from "@material-ui/core/DialogActions";
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,
@@ -101,113 +105,114 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-
-let deleteProduct = () => {
-  alert("hi");
+let getID = (params) => {
+  console.log(params);
+  return params.id;
 };
-const columns = [
-  { field: "image", headerName: "ID", cellClassName: "center", width: 90 },
-  { field: "title", headerName: " Name", editable: true, width: 150 },
-  { field: "price", headerName: "price", editable: true, width: 150 },
-  {
-    field: "numberOfOrders",
-    headerName: "Number Of Orders",
-    type: "number",
-    align: "center",
-    cellClassName: (params) => {
-      return clsx("dataCell", {
-        negative: params.value <= 4,
-        positive: params.value > 4,
-      });
-    },
-    renderCell: (params) => {
-      return <Chip label={params.value} variant="outlined" />;
-    },
-    width: 180,
-  },
 
-  {
-    field: "stock",
-    headerName: "stock",
-    type: "number",
-    align: "center",
-    headerAlign: "center",
+// let PRODUCTS = [
+//   {
+//     id: 1,
+//     title: "Sport shoe",
+//     image: 1,
+//     price: 12.99,
+//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//     color: "red",
+//     label: ["shoes", "sport"],
+//     numberOfOrders: 4,
+//     stock: 12,
+//   },
 
-    renderCell: (params) => {
-      return <Chip label={params.value} color="primary" variant="outlined" />;
-    },
-    width: 150,
-  },
-
-  {
-    field: "images",
-    headerName: "delete",
-    align: "center",
-    renderCell: () => {
-      return (
-        <DeleteIcon
-          onClick={deleteProduct}
-          styles={{ width: 40, height: 40, cursor: "pointer" }}
-        />
-      );
-    },
-    editable: false,
-    width: 120,
-  },
-];
-
-let PRODUCTS = [
-  {
-    id: 1,
-    title: "Sport shoe",
-    image: 1,
-    price: 12.99,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "red",
-    label: ["shoes", "sport"],
-    numberOfOrders: 4,
-    stock: 12,
-  },
-
-  {
-    id: 2,
-    title: "Watch",
-    image: 2,
-    price: 82.99,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "gold",
-    label: ["accus", "clothes"],
-    numberOfOrders: 15,
-    stock: 1,
-  },
-  {
-    id: 3,
-    title: "Shampoo",
-    image: 4,
-    price: 9.99,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "white",
-    label: ["clean", "body"],
-    numberOfOrders: 15,
-    stock: 8,
-  },
-  {
-    id: 4,
-    title: "Blue man Perfume",
-    image: 5,
-    price: 99.75,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    color: "red",
-    label: ["perfume", "casual"],
-    numberOfOrders: 15,
-    stock: 12,
-  },
-];
+//   {
+//     id: 2,
+//     title: "Watch",
+//     image: 2,
+//     price: 82.99,
+//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//     color: "gold",
+//     label: ["accus", "clothes"],
+//     numberOfOrders: 15,
+//     stock: 1,
+//   },
+//   {
+//     id: 3,
+//     title: "Shampoo",
+//     image: 4,
+//     price: 9.99,
+//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//     color: "white",
+//     label: ["clean", "body"],
+//     numberOfOrders: 15,
+//     stock: 8,
+//   },
+//   {
+//     id: 4,
+//     title: "Blue man Perfume",
+//     image: 5,
+//     price: 99.75,
+//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+//     color: "red",
+//     label: ["perfume", "casual"],
+//     numberOfOrders: 15,
+//     stock: 12,
+//   },
+// ];
 
 function ProductsDashboard() {
+  const columns = [
+    { field: "id", headerName: "ID", cellClassName: "center", width: 90 },
+    { field: "title", headerName: " Name", editable: true, width: 150 },
+    { field: "price", headerName: "price", editable: true, width: 150 },
+    {
+      field: "numberOfOrders",
+      headerName: "Number Of Orders",
+      type: "number",
+      align: "center",
+      cellClassName: (params) => {
+        return clsx("dataCell", {
+          negative: params.value <= 4,
+          positive: params.value > 4,
+        });
+      },
+      renderCell: (params) => {
+        return <Chip label={params.value || "no orders"} variant="outlined" />;
+      },
+      width: 180,
+    },
+
+    {
+      field: "stock",
+      headerName: "stock",
+      type: "number",
+      align: "center",
+      headerAlign: "center",
+
+      renderCell: (params) => {
+        return <Chip label={params.value} color="primary" variant="outlined" />;
+      },
+      width: 150,
+    },
+
+    {
+      field: "images",
+      headerName: "delete",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <DeleteIcon
+            onClick={() => handleDeleteProduct(params.id)}
+            styles={{ width: 40, height: 40, cursor: "pointer" }}
+          />
+        );
+      },
+      editable: false,
+      width: 120,
+    },
+  ];
   const classes = useStyle();
-  let products = useSelector(getProducts);
-  console.log(products);
+  const [products, setProducts] = useState([]);
+  const [alert, setAlert] = useState(false);
+  const [dialog, setDialog] = useState(false);
   let [addProductMenu, toggleAddProductMenu] = useState(false);
 
   const handleAddProduct = () => {
@@ -217,6 +222,58 @@ function ProductsDashboard() {
   const handleAddMenuClose = () => {
     toggleAddProductMenu(false);
   };
+
+  let handleDeleteProduct = (id) => {
+    setDialog(id);
+  };
+
+  let deleteProduct = async (id) => {
+    fetch("/api/dashboard/deleteProduct", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
+      .then((response) => {
+        if (response.status === 200) console.log(response.status);
+        setAlert(true);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  let handleAlertClose = () => {
+    setAlert(false);
+  };
+
+  let handleDialogClose = () => {
+    setDialog(false);
+  };
+  let handleDialogApprove = () => {
+    deleteProduct(dialog);
+    setDialog(false);
+  };
+
+  useEffect(() => {
+    async function getProducts() {
+      let response = await fetch("/api/dashboard/products");
+      let productsList = await response.json();
+      let formattedProducts = productsList.map(
+        ({ title, _id, price, description, numberOfOrders, stock }) => {
+          return {
+            title,
+            id: _id,
+            price,
+            description,
+            numberOfOrders,
+            stock,
+          };
+        }
+      );
+      setProducts(formattedProducts);
+    }
+    getProducts();
+  }, [alert]);
   return (
     <Container1>
       <DashboardSidebar selectedId={1} />
@@ -224,6 +281,13 @@ function ProductsDashboard() {
         <AddProduct className="addProduct" closeMenu={handleAddMenuClose} />
       ) : (
         <MainMenu>
+          {/* alert */}
+          {alert ? (
+            <Alert variant="filled" onClose={handleAlertClose}>
+              {" "}
+              Product Deleted successfully{" "}
+            </Alert>
+          ) : null}
           <ThemeProvider theme={dashboardTheme}>
             <Container className={classes.contentContainer}>
               <Container className={classes.Title}>
@@ -235,14 +299,48 @@ function ProductsDashboard() {
                   return <StaticCard key={index} />;
                 })}
               </Container>
+              {dialog ? (
+                <Dialog open={Boolean(dialog)} onClose={handleDialogClose}>
+                  <DialogTitle>
+                    {" "}
+                    are you sure You want To delete This Product{" "}
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button
+                      style={{
+                        background: "#354555",
+                        width: 50,
+                        color: "white",
+                      }}
+                      onClick={handleDialogApprove}
+                    >
+                      {" "}
+                      Delete{" "}
+                    </Button>
+                    <Button
+                      style={{
+                        border: "solid 1px #354555",
+                        width: 50,
+                        color: " #354555",
+                      }}
+                      onClick={handleDialogClose}
+                    >
+                      {" "}
+                      Cancel{" "}
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              ) : null}
               <Container className={classes.tableContainer}>
-                <DataGrid
-                  rows={PRODUCTS}
-                  columns={columns}
-                  checkboxSelection
-                  disableSelectionOnClick
-                  autoPageSize
-                />
+                {products && (
+                  <DataGrid
+                    rows={products}
+                    columns={columns}
+                    checkboxSelection
+                    disableSelectionOnClick
+                    autoPageSize
+                  />
+                )}
               </Container>
             </Container>
           </ThemeProvider>

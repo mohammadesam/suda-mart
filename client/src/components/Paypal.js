@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../features/cartSlice";
 import { addPunch } from "../features/cartSlice";
+import Cookies from "js-cookie";
+import ErrorPage from "./ErrorPage";
 const STYLE = {
   display: "flex",
   justifyContent: "center",
@@ -17,15 +19,22 @@ const style2 = {
   justifyContent: "center",
   alignItem: "center",
 };
-
-const PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
+let PayPalButton;
+if (window.paypal != undefined) {
+  PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
+}
 
 function Paypal() {
+  let user =
+    Cookies.get("user") != undefined
+      ? JSON.parse(Cookies.get("user"))
+      : undefined;
+  console.log(user);
   let cart = useSelector(getCart);
   let history = useHistory();
   let dispatch = useDispatch();
   const createOrder = () => {
-    return fetch("http://localhost:3500/makeOrder", {
+    return fetch("/api/makeOrder", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -63,6 +72,17 @@ function Paypal() {
     const order = await action.order.capture();
     console.log(order);
     // todo make recite
+
+    await fetch("/api/dashboard/orders/add", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        cartData: localStorage.getItem("cart"),
+        user: user._id,
+      }),
+    });
     localStorage.removeItem("cart");
     dispatch(addPunch([]));
     history.push("success");
@@ -76,12 +96,16 @@ function Paypal() {
 
   return (
     <div style={STYLE}>
-      <PayPalButton
-        style={style2}
-        createOrder={(data, action) => createOrder(data, action)}
-        onApprove={(data, action) => onApprove(data, action)}
-        onError={(err) => onError(err)}
-      />
+      {PayPalButton === undefined ? (
+        <ErrorPage msg="Failed to Load paypal page please check your connection and reload the page" />
+      ) : (
+        <PayPalButton
+          style={style2}
+          createOrder={(data, action) => createOrder(data, action)}
+          onApprove={(data, action) => onApprove(data, action)}
+          onError={(err) => onError(err)}
+        />
+      )}
     </div>
   );
 }

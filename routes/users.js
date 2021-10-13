@@ -48,6 +48,14 @@ passport.deserializeUser((id, done) => {
   });
 });
 // routes
+
+Router.get("/", (req, res) => {
+  user.find({}, (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+});
+
 Router.post("/login", passport.authenticate("local"), (req, res) => {
   let { name, email, role, _id } = req.user;
   res.cookie("user", JSON.stringify({ name, email, role, _id }), {
@@ -59,24 +67,26 @@ Router.post("/login", passport.authenticate("local"), (req, res) => {
 });
 
 Router.post("/register", async (req, res) => {
-  await user.findOne({ email: req.body.email }, (err, result) => {
-    if (result != undefined)
-      return res.redirect("http://localhost:3000/login?msg=registered");
-  });
+  let matchEmail = await user.findOne({ email: req.body.email });
+  if (matchEmail != undefined) {
+    return res.redirect("http://localhost:3000/login?msg=registered");
+  } else {
+    console.log(req.body);
 
-  let hashedPassword = await bcrypt.hash(req.body.password1, 10);
-  let newUser = new user({
-    _id: mongoose.Types.ObjectId(),
-    name: req.body.firstName,
-    email: req.body.email,
-    password: hashedPassword,
-    role: "admin",
-  });
+    let hashedPassword = await bcrypt.hash(req.body.password, 10);
+    let newUser = new user({
+      _id: mongoose.Types.ObjectId(),
+      name: req.body.firstName,
+      email: req.body.email,
+      password: hashedPassword,
+      role: "client",
+    });
 
-  newUser.save().then(() => {
-    console.log("successfully registered");
-    res.redirect("http://localhost:3000/login");
-  });
+    newUser.save().then(() => {
+      console.log("successfully registered");
+      res.redirect("http://localhost:3000/login");
+    });
+  }
 });
 
 Router.get("/logout", (req, res) => {

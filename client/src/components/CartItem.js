@@ -2,23 +2,25 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { remove, addOne, changeAmount } from "../features/cartSlice";
 import { useDispatch } from "react-redux";
-function CartItem({ id, name, image, price, quantity }) {
+function CartItem({ _id, title, image, price, quantity }) {
   let dispatch = useDispatch();
 
   let handleQuantityUpdate = (value) => {
     if (quantity === 1 && value === -1) return;
-    dispatch(addOne({ id, value }));
+    dispatch(addOne({ _id, value }));
   };
 
   let handleDelete = () => {
-    dispatch(remove(id));
+    dispatch(remove(_id));
   };
+  let buff = new Buffer.from(image.data.data);
+  let base64Image = buff.toString("base64");
   return (
     <Container>
       <div>
-        <img src={`/images/product ${image}.jpg`} />
+        <img src={`data: ${image.contentType};base64,${base64Image}`} />
         <div className="details">
-          <h5> {name} </h5>
+          <h5> {title} </h5>
           <span>
             <strong>{`${price} $`}</strong>
           </span>

@@ -217,10 +217,10 @@ function NavBar({ changeTheme }) {
           <MenuItem onClick={handleClose}>
             <Link to="/"> Home </Link>
           </MenuItem>
-          <MenuItem ocClick={handleClose}>
+          <MenuItem onClick={handleClose}>
             <Link to="/products"> Products </Link>
           </MenuItem>
-          <MenuItem ocClick={handleClose}>
+          <MenuItem onClick={handleClose}>
             <Link to="#"> About </Link>
           </MenuItem>
         </Menu>
@@ -233,9 +233,12 @@ function NavBar({ changeTheme }) {
         </Typography>
         <div className={classes.buttons}>
           {/** cart icon */}
-          <IconButton href="/cart">
+          <IconButton>
             <Badge badgeContent={cartItemsNumber} className={classes.cartBadge}>
-              <ShoppingCartIcon className={classes.cartIcon} />
+              <Link to="/cart">
+                {" "}
+                <ShoppingCartIcon className={classes.cartIcon} />{" "}
+              </Link>
             </Badge>
           </IconButton>
           {/** user Iamge or login button */}
@@ -269,11 +272,20 @@ function NavBar({ changeTheme }) {
           >
             <MenuItem>
               {" "}
-              <Link to="/dashboard"> dashboard </Link>{" "}
+              <Link
+                to={
+                  user && user.role === "admin"
+                    ? "/dashboard"
+                    : `/dashboard/normal_user/`
+                }
+              >
+                {" "}
+                dashboard{" "}
+              </Link>{" "}
             </MenuItem>
             <MenuItem>
               {" "}
-              <Link to="#">Logout</Link>{" "}
+              <a href="/api/users/logout">Logout</a>{" "}
             </MenuItem>
           </Menu>
         </div>
@@ -284,230 +296,6 @@ function NavBar({ changeTheme }) {
       </ToolBar>
     </AppBar>
   );
-
-  // <Container>
-  //     <Logo>
-  //       <img src="/images/logo.svg" alt="" />
-  //     </Logo>
-  //     <Links>
-  //       <Link to="/">
-  //         <span>Home</span>
-  //       </Link>
-  //       <Link to="/products">
-  //         <span>Products</span>
-  //       </Link>
-  //       <Link to="/">
-  //         <span>Content</span>
-  //       </Link>
-  //     </Links>
-  //     <CartContainer>
-  //       <CartImage>
-  //         <Link to="/cart">
-  //           <img src="/images/shopping-cart.svg" alt="" />
-  //         </Link>
-  //       </CartImage>
-  //       <Label className={cartItemsNumber > 0 ? "red" : "gray"}>
-  //         {cartItemsNumber}
-  //       </Label>
-  //       <UserContainer>
-  //         {user === undefined ? (
-  //           <Link className="login" to="/login">
-  //             {" "}
-  //             Login
-  //             <svg
-  //               aria-hidden="true"
-  //               role="img"
-  //               width="15"
-  //               height="15"
-  //               preserveAspectRatio="xMidYMid meet"
-  //               viewBox="0 0 24 24"
-  //             >
-  //               <path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5l-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z" />
-  //             </svg>
-  //           </Link>
-  //         ) : (
-  //           <img
-  //             src="/logo192.png"
-  //             alt="user"
-  //             onClick={() => setDropdown((d) => !d)}
-  //           />
-  //         )}
-  //         <ul className={dropDown ? "show" : "hide"}>
-  //           <li>
-  //             <Link to="/dashboard">Account</Link>{" "}
-  //           </li>
-  //           <li>
-  //             <Link to="/logout">logout</Link>{" "}
-  //           </li>
-  //         </ul>
-  //       </UserContainer>
-  //     </CartContainer>
-  //   </Container>
 }
 
 export default NavBar;
-// const Container = styled.nav`
-//   display: flex;
-//   width: 100vw;
-//   height: 70px;
-//   align-items: center;
-// `;
-// const Logo = styled.div`
-//   width: 25%;
-//   padding: 0 5em;
-
-//   img {
-//     width: 200px;
-//     height: 70px;
-//   }
-
-//   @media screen and (max-width: 900px) {
-//     & {
-//       padding: 1.5em;
-//     }
-//     & > img {
-//       width: 70px;
-//     }
-//   }
-// `;
-
-// const Links = styled.div`
-//   @media screen and (max-width: 600px) {
-//     & {
-//       font-size: 0.6rem;
-//       a > span {
-//         margin: 0;
-//         padding: 0 5px;
-//       }
-
-//       a {
-//         margin: 5px !important;
-//       }
-//     }
-//   }
-
-//   position: relative;
-//   width: 55%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   font-size: 1.2rem;
-//   font-weight: bold;
-
-//   a {
-//     margin: 0 40px;
-//     position: relative;
-//     transition: 0.25s;
-//   }
-//   a > span::before {
-//     position: absolute;
-//     content: "";
-//     bottom: -2px;
-//     left: 0;
-//     right: 0;
-//     height: 2px;
-//     transition: all 250ms;
-//     transform: scaleX(0);
-//     background: #c0770a;
-//   }
-
-//   a:hover {
-//     span::before {
-//       transform: scaleX(1);
-//     }
-//   }
-// `;
-
-// const CartContainer = styled.div`
-//   width: 20%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-
-// const CartImage = styled.div`
-//   img {
-//     width: 30px;
-//     height: 30px;
-//     cursor: pointer;
-//   }
-// `;
-
-// const Label = styled.span`
-//   width: 29px;
-//   height: 25px;
-//   border-radius: 25px;
-//   background: #797373;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   color: white;
-//   margin: 0 7px;
-//   font-weight: bold;
-//   transition: 0.4s;
-
-//   &.gay {
-//     background: #797373;
-//   }
-
-//   &.red {
-//     background: #f00;
-//   }
-// `;
-
-// const UserContainer = styled.div`
-//   margin: 0 0 0 1.2rem;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   position: relative;
-//   img {
-//     width: 30px;
-//     height: 30px;
-//     cursor: pointer;
-//   }
-
-//   ul {
-//     position: absolute;
-//     bottom: 0px;
-//     list-style: none;
-//     display: none;
-//     transition: 0.25s;
-
-//     li {
-//       background: #fff;
-//       padding: 10px 7px;
-//       text-align: center;
-//       cursor: pointer;
-//       &:hover {
-//         text-decoration: underline;
-//       }
-//     }
-//   }
-
-//   ul.show {
-//     transform: translateY(80px);
-//     display: block;
-//   }
-
-//   ul.hide {
-//     display: none;
-//   }
-
-//   a.login {
-//     padding: 0.2rem 0.4rem;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     background: transparent;
-//     cursor: pointer;
-//     border: solid 1px #c0770a;
-//     outline: 0;
-//     color: #c0770a;
-//     font-size: 0.9rem;
-//     svg {
-//       fill: #c0770a;
-//       margin: 0 5px;
-//     }
-//   }
-// `;

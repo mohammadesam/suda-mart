@@ -18,7 +18,7 @@ Router.get("/products", (req, res) => {
 });
 
 Router.post("/product", upload.single("image"), (req, res) => {
-  let { title, price, description, color, quantity, image } = req.body;
+  let { title, price, description, color, quantity, image, label } = req.body;
   console.log(req.file, image);
   let product = new Product({
     _id: mongoose.Types.ObjectId(),
@@ -34,15 +34,40 @@ Router.post("/product", upload.single("image"), (req, res) => {
       ),
       contentType: req.file.mimetype,
     },
+    label,
   });
 
   product
     .save()
     .then(() => {
       console.log("product add successfully");
+      deleteFile(path.join(req.file.destination + req.file.filename));
       res.redirect("http://localhost:3000/dashboard/products");
     })
     .catch((err) => console.log("something went wrong", err));
 });
+
+Router.get("/product/:id", async (req, res) => {
+  console.log("test");
+  Product.findById(req.params.id)
+    .then((product) => {
+      res.json(product);
+    })
+    .catch((err) => {
+      res.status(500).send("product not found");
+    });
+});
+
+Router.post("/deleteProduct", (req, res) => {
+  Product.deleteOne({ _id: req.body.id }, (err) => {
+    if (err) console.log(err);
+    else console.log("deleted successfully");
+    res.send("done");
+  });
+});
+
+function deleteFile(filename) {
+  fs.unlinkSync(filename);
+}
 
 module.exports = Router;

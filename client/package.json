@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
     "@mui/x-data-grid": "^4.0.0",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
@@ -12,6 +13,7 @@
     "@testing-library/user-event": "^12.8.3",
     "chart.js": "^3.5.1",
     "clsx": "^1.1.1",
+    "http-proxy-middleware": "^2.0.1",
     "js-cookie": "^3.0.0",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.4",
@@ -46,5 +48,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:3500"
 }

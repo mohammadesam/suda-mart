@@ -14,7 +14,7 @@ const cartSlice = createSlice({
   reducers: {
     add: (state, action) => {
       let copy = state.cart;
-      let productCopy = copy.find((item) => item.id === action.payload.id);
+      let productCopy = copy.find((item) => item._id === action.payload._id);
       if (productCopy !== undefined) {
         let updatedProduct = {
           ...action.payload,
@@ -25,17 +25,17 @@ const cartSlice = createSlice({
       } else state.cart = [...state.cart, { ...action.payload, quantity: 1 }];
     },
 
-    // removes item from cart (receives id)
+    // removes item from cart (receives _id)
     remove: (state, action) => {
       let copy = state.cart;
-      let cartItem = copy.find((item) => item.id === action.payload);
+      let cartItem = copy.find((item) => item._id === action.payload);
       copy.splice(copy.indexOf(cartItem), 1);
       state.cart = copy;
     },
 
     addOne: (state, action) => {
       let copy = state.cart;
-      let cartItem = copy.find((item) => item.id === action.payload.id);
+      let cartItem = copy.find((item) => item._id === action.payload._id);
       cartItem.quantity += action.payload.value;
 
       copy.splice(copy.indexOf(cartItem), 1, cartItem);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardSidebar from "./DashboardSidebar";
 import Container from "@material-ui/core/Container";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
@@ -8,7 +8,8 @@ import { Typography } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Chip from "@material-ui/core/Chip";
-import clsx from "clsx";
+import Alert from "@material-ui/lab/Alert";
+import ConfirmDialog from "./ConfirmDialog";
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,
@@ -78,51 +79,6 @@ const useStyle = makeStyles((theme) => ({
 let deleteProduct = () => {
   alert("hi");
 };
-const columns = [
-  { field: "id", headerName: "ID", cellClassName: "center", width: 30 },
-  { field: "firstName", headerName: "First Name", editable: true, width: 120 },
-  { field: "lastName", headerName: "Last Name", editable: true, width: 120 },
-  { field: "email", headerName: "Email", editable: true, width: 120 },
-
-  {
-    field: "numberOfOrders",
-    headerName: "Number Of Orders",
-    type: "number",
-    align: "center",
-    renderCell: (params) => {
-      return <Chip label={params.value} variant="outlined" />;
-    },
-    width: 180,
-  },
-
-  {
-    field: "role",
-    headerName: "Role",
-    type: "string",
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => {
-      return <Chip label={params.value} color="primary" variant="outlined" />;
-    },
-    width: 100,
-  },
-
-  {
-    field: "images",
-    headerName: "delete",
-    align: "center",
-    renderCell: () => {
-      return (
-        <DeleteIcon
-          onClick={deleteProduct}
-          styles={{ width: 40, height: 40, cursor: "pointer" }}
-        />
-      );
-    },
-    editable: false,
-    width: 120,
-  },
-];
 
 let PRODUCTS = [
   {
@@ -136,8 +92,7 @@ let PRODUCTS = [
 
   {
     id: 2,
-    firstName: "ali",
-    lastName: "ahmad",
+    name: "ali",
     email: "hello@gmail.com",
     role: "admin",
     numberOfOrders: 5,
@@ -161,12 +116,95 @@ let PRODUCTS = [
 ];
 
 function Users() {
+  const columns = [
+    { field: "id", headerName: "ID", cellClassName: "center", width: 30 },
+    { field: "name", headerName: "Name", editable: true, width: 120 },
+
+    { field: "email", headerName: "Email", editable: true, width: 120 },
+
+    {
+      field: "numberOfOrders",
+      headerName: "Number Of Orders",
+      type: "number",
+      align: "center",
+      renderCell: (params) => {
+        return <Chip label={params.value} variant="outlined" />;
+      },
+      width: 180,
+    },
+
+    {
+      field: "role",
+      headerName: "Role",
+      type: "string",
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params) => {
+        return <Chip label={params.value} color="primary" variant="outlined" />;
+      },
+      width: 100,
+    },
+
+    {
+      field: "images",
+      headerName: "delete",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <DeleteIcon
+            onClick={() => handleDeleteUser(params.id)}
+            styles={{ width: 40, height: 40, cursor: "pointer" }}
+          />
+        );
+      },
+      editable: false,
+      width: 120,
+    },
+  ];
+
   const classes = useStyle();
+  const [users, setUsers] = useState([]);
+  const [alert, setAlert] = useState(false);
+  const [dialog, setDialog] = useState(false);
+
+  useEffect(() => {
+    async function getUsers() {
+      let response = await fetch("/api/users/");
+      let usersList = await response.json();
+      let formattedUsers = usersList.map(({ _id, name, email, role }) => ({
+        id: _id,
+        name,
+        email,
+        role,
+        numberOfOrders: 5,
+      }));
+      setUsers(formattedUsers);
+    }
+    getUsers();
+  }, []);
+
+  const handleDeleteUser = (id) => {
+    setDialog(id);
+    console.log(id);
+  };
+  const deleteUser = (id) => {
+    window.alert("deleted");
+    setAlert(true);
+  };
+
+  let handleAlertClose = () => {
+    setAlert(false);
+  };
   return (
     <Container className={classes.container}>
       <ThemeProvider theme={dashboardTheme}>
         <DashboardSidebar selectedId={2} />
         <Container className={classes.contentContainer}>
+          {alert ? (
+            <Alert variant="filled" onClose={handleAlertClose}>
+              User Deleted successfully
+            </Alert>
+          ) : null}
           <Container className={classes.Title}>
             <Typography variant="h2">Users</Typography>
           </Container>
@@ -175,14 +213,24 @@ function Users() {
               return <StaticCard key={index} />;
             })}
           </Container>
-          <Container className={classes.tableContainer}>
-            <DataGrid
-              rows={PRODUCTS}
-              columns={columns}
-              checkboxSelection
-              disableSelectionOnClick
-              autoPageSize
+          {dialog ? (
+            <ConfirmDialog
+              deleteHandler={deleteUser}
+              phrase={"are you sure you want to delete this user"}
+              dialog={dialog}
+              setDialog={setDialog}
             />
+          ) : null}
+          <Container className={classes.tableContainer}>
+            {users && (
+              <DataGrid
+                rows={users}
+                columns={columns}
+                checkboxSelection
+                disableSelectionOnClick
+                autoPageSize
+              />
+            )}
           </Container>
         </Container>
       </ThemeProvider>

@@ -3,18 +3,19 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { add, getCart, remove } from "../features/cartSlice";
-function ProductCard({ image, title, price, description, id, product }) {
-  console.log(product);
+function ProductCard({ image, title, price, description, _id, product }) {
+  let buff = new Buffer.from(image.data.data);
+  let base64Image = buff.toString("base64");
   let history = useHistory();
   let dispatch = useDispatch();
   let cartItems = useSelector(getCart);
-  let inCart = cartItems.filter((item) => item.id === id);
+  let inCart = cartItems.filter((item) => item._id === _id);
   function addToCart() {
     dispatch(add({ ...product }));
   }
 
   function removeFromCart() {
-    dispatch(remove(id));
+    dispatch(remove(_id));
   }
 
   useEffect(() => {
@@ -24,8 +25,8 @@ function ProductCard({ image, title, price, description, id, product }) {
   return (
     <Container>
       <img
-        src={`${image}`}
-        onClick={() => history.push(`/products/${id}`)}
+        src={`data:${image.contentType};base64,${base64Image}`}
+        onClick={() => history.push(`/products/${_id}`)}
         alt="product"
       />
       <h2> {title.length > 20 ? title.substr(0, 20) + " ..." : title} </h2>
@@ -54,7 +55,7 @@ const Container = styled.div`
     width: 35%;
     margin: 1rem;
   }
-  min-width: 250px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   width: 20%;
@@ -90,7 +91,7 @@ const Container = styled.div`
     .removeFromCartBtn {
       padding: 0 5px 0 0;
       font-weight: bold;
-      background: #c0770a;
+      background: #085d55;
       color: white;
       border: none;
       .badge {
@@ -115,17 +116,17 @@ const Container = styled.div`
     background: #fff;
     border-radius: 20px;
     padding: 3px 10px;
-    border: solid 1px #c0770a;
+    border: solid 1px #085d55;
     cursor: pointer;
     transition: 0.25s;
-    color: #c0770a;
+    color: #085d55;
     font-weight: bold;
     transform: scale(1.1);
 
     &:hover {
       transform: scale(1.2);
-      background: #c0770a;
-      border-color: #c0770a;
+      background: #085d55;
+      border-color: #085d55;
       color: white;
     }
   }
