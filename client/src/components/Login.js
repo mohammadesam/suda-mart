@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 function Login({ type }) {
   const [password, setPassword] = useState("");
   const [matchedPassword, setMatchedPassword] = useState(false);
+  const history = useHistory();
   function handlePasswordMatch(e, mode) {
     if (mode === "set") setPassword(e.target.value);
     else if (mode === "match") {
       return setMatchedPassword(e.target.value === password);
     }
   }
+
+  const handleGoBack = () => {
+    history.push("/");
+  };
   if (type === "login") {
     return (
       <Container>
+        <ArrowBackIcon onClick={handleGoBack} />
         <FormWarper>
           <h1> Login </h1>
           <form action="/api/users/login" method="POST">
@@ -48,6 +55,7 @@ function Login({ type }) {
   } else {
     return (
       <Container>
+        <ArrowBackIcon onClick={handleGoBack} />
         <FormWarper>
           <h1>Register</h1>
           <form action="/api/users/register" method="POST">
@@ -113,6 +121,13 @@ const Container = styled.div`
   align-items: center;
   background: #fff;
   padding: 2rem 0;
+
+  & > svg {
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    cursor: pointer;
+  }
 `;
 
 const FormWarper = styled.div`

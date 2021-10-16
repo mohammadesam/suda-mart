@@ -14,6 +14,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import OrderDetails from "./orderDetails";
 import { yellow, green } from "@material-ui/core/colors";
+import SeeMoreIcon from "@material-ui/icons/MoreHoriz";
+import AirportShuttleIcon from "@material-ui/icons/AirportShuttle";
+import PaymentIcon from "@material-ui/icons/Payment";
 import clsx from "clsx";
 
 const useStyle = makeStyles((theme) => ({
@@ -86,10 +89,11 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-let ORDERS = [
-  { id: 8, title: "banana", price: 1.5, quantity: 3, user: "ali" },
-  { id: 9, title: "banana", price: 1.5, quantity: 3, user: "ali" },
-];
+const getStatusIcon = (status) => {
+  if (status === "paid")
+    return <PaymentIcon style={{ width: 18, color: "black" }} />;
+  return <AirportShuttleIcon style={{ width: 18, color: "white" }} />;
+};
 function Orders() {
   const columns = [
     { field: "id", headerName: "ID", cellClassName: "center", width: 90 },
@@ -109,7 +113,13 @@ function Orders() {
         });
       },
       renderCell: (params) => {
-        return <Chip label={params.value || "paid"} variant="outlined" />;
+        return (
+          <Chip
+            label={params.value || "paid"}
+            icon={getStatusIcon(params.value)}
+            variant="outlined"
+          />
+        );
       },
       width: 180,
     },
@@ -121,12 +131,29 @@ function Orders() {
         return (
           <DeleteIcon
             onClick={() => handleDeleteOrder(params.id)}
-            styles={{ width: 40, height: 40, cursor: "pointer" }}
+            styles={{ width: 40, height: 40, cursor: "pointer", zIndex: 10 }}
+          />
+        );
+      },
+
+      editable: false,
+      width: 80,
+    },
+
+    {
+      field: "more",
+      headerName: "More",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <SeeMoreIcon
+            onClick={() => setOpenDetails(params.id)}
+            styles={{ width: 40, height: 40, cursor: "pointer", zIndex: 10 }}
           />
         );
       },
       editable: false,
-      width: 120,
+      width: 60,
     },
   ];
   const classes = useStyle(dashboardTheme);
@@ -147,7 +174,13 @@ function Orders() {
     getData();
   }, []);
   let deleteOrder = () => {
-    window.alert("deleted");
+    fetch(`/api/dashboard/orders/delete/${dialog}`)
+      .then(() => {
+        setAlert(true);
+      })
+      .catch((err) => {
+        window.alert("some thing went wrong");
+      });
   };
   let handleDeleteOrder = (id) => {
     setDialog(id);
@@ -226,10 +259,6 @@ function Orders() {
                 checkboxSelection
                 disableSelectionOnClick
                 autoPageSize
-                style={{ cursor: "pointer" }}
-                onRowClick={(params) => {
-                  setOpenDetails(params.id);
-                }}
               />
             )}
           </Container>

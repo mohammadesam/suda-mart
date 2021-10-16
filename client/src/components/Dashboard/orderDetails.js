@@ -14,12 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import orange from "@material-ui/core/colors/orange";
-
-let ORDERS = [
-  { id: 8, title: "banana", price: 1.5, quantity: 3, user: "ali" },
-  { id: 9, title: "banana", price: 1.5, quantity: 3, user: "ali" },
-];
+import { orange, green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   leftContainer: {
@@ -66,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       background: orange[800],
     },
+  },
+  delivered: {
+    background: green[400],
   },
 }));
 
@@ -163,10 +161,13 @@ function OrderDetails({ id, setOpen, userType }) {
                 })}
               {userType === "normalUser" ? null : (
                 <Button
+                  disabled={order.status === "paid" ? false : true}
                   href={`/api/dashboard/orders/deliver/${id}`}
-                  className={classes.deliverButton}
+                  className={`${classes.deliverButton} ${
+                    order.status === "paid" ? "" : classes.delivered
+                  }`}
                 >
-                  Deliver Order
+                  {order.status === "paid" ? "Deliver Order" : "Delivered ✔"}
                 </Button>
               )}
             </List>

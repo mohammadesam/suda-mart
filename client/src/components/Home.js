@@ -17,7 +17,7 @@ function Home() {
           <Button theme={theme}> Get Offers </Button>
         </LeftSide>
         <RightSide>
-          <img src="\images\LandingPageVector.jpg" alt="suda mart Logo" />
+          <img src="\images\LandingPageIllustration.png" alt="suda mart Logo" />
         </RightSide>
       </Container>
     </div>
@@ -32,12 +32,12 @@ export default Home;
 //   left: 0;
 //   right: 0;
 //   bottom: 0;
-//   z-index: -2;
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: cover;
-//   }
+
+// img {
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+// }
 // `;
 
 // const Wraper = styled.div`
@@ -63,6 +63,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   top: 70px;
+  //background: #f7f7f7;
   background: ${({ theme }) => theme.primary};
 `;
 
@@ -73,21 +74,23 @@ const Title = styled.h1`
   margin: 0;
   position: relative;
   left: 150px;
+  animation: fadeIn 0.5s 1 ease-out;
 `;
 
 const Description = styled.div`
-  color: ${({ theme }) => theme.contrast};
+  color: ${({ theme }) => theme.secondary};
   width: 50%;
   left: 150px;
   position: relative;
   margin: 2rem 0;
+  animation: pop-up 1s 1 ease-in;
 `;
 
 const Button = styled.a`
   position: relative;
   left: 150px;
   width: 120px;
-  color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.contrast};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,10 +139,11 @@ const RightSide = styled.div`
     align-items: center;
     justify-content: center;
     & > img {
-      width: 40vw !important;
+      width: 80% !important;
       height: 40vh !important;
     }
   }
+
   @media screen and (max-width: 960px) and (min-width: 500px) {
     & > img {
       width: 30vw !important;
@@ -157,5 +161,6 @@ const RightSide = styled.div`
   img {
     width: 35vw;
     height: 70vh;
+    animation: fadeIn 0.4s 1 ease-in;
   }
 `;

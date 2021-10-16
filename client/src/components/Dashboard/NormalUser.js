@@ -10,27 +10,8 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useSelector } from "react-redux";
 import { getUser } from "../../features/userSlice";
 import OrderDetails from "./orderDetails";
-import loadingScreen from "../LoadingScreen";
 import ErrorPage from "../ErrorPage";
 import LoadingScreen from "../LoadingScreen";
-const ORDERS = [
-  {
-    _id: 20,
-    products: [
-      {
-        name: "test",
-        price: "22",
-        quantity: 2,
-      },
-      {
-        name: "test",
-        price: "22",
-        quantity: 2,
-      },
-    ],
-    state: "done",
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +78,10 @@ function NormalUser() {
 
   useEffect(() => {
     async function getOrders() {
+      if (user === undefined)
+        setError(
+          "oops it seems You are not logged In please login and try again"
+        );
       try {
         let response = await fetch(
           `/api/dashboard/orders/userOrders/${user && user._id}`
@@ -107,14 +92,13 @@ function NormalUser() {
           return { ...order, date: getTimePassed(order.date) };
         });
         setOrders(formattedOrders);
-        console.log(formattedOrders);
         setLoading(false);
       } catch (err) {
         setError("error happened please reload the page");
       }
     }
     getOrders();
-  }, []);
+  }, [user]);
 
   let handleGoBack = () => {
     history.push("/");
@@ -164,7 +148,7 @@ function NormalUser() {
                     {" "}
                     <b>{index + 1}.</b>{" "}
                   </div>
-                  <div> {order.products.length} </div>
+                  <div> {order.products.length} Products </div>
                   <div>
                     {" "}
                     <Chip color="#g23" label={order.status} />

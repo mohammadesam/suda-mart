@@ -28,3 +28,46 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+/* .scene {
+  --perspective: 1000px;
+  --rotate-x: -15deg;
+  --rotate-y: -40deg;
+
+  perspective: calc(var(--perspective, 800) * 1px);
+  transform-style: preserve-3d;
+  width: 100vw;
+  position: relative;
+  top: 70px;
+  height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: hsl(0, 0%, 90%);
+}
+
+.plane {
+  background: hsla(180, 50%, 50%, 0.5);
+  height: 100px;
+  width: 100px;
+  transform-style: preserve-3d;
+  transform: rotateX(160deg) rotateY(40deg) rotateX(90deg) translate3d(0, 0, 0);
+} */
+
+@keyframes fadeIn {
+  from {
+    transform: translate(-100%, 0);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes pop-up {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

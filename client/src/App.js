@@ -20,7 +20,6 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { DarkDefaultTheme, DefaultTheme } from "./components/theme";
 import { useSelector } from "react-redux";
 import { getUser } from "./features/userSlice";
-import normalUserOrderDetails from "./components/normalUserOrderDetails";
 
 function App() {
   const [theme, setTheme] = useState(false);
@@ -61,9 +60,7 @@ function App() {
             <Route exact path="/dashboard/normal_user">
               {user !== null ? <NormalUser /> : <PageNotFound />}
             </Route>
-            <Route path="/dashboard/normal_user/:id">
-              {user !== null ? <normalUserOrderDetails /> : <PageNotFound />}
-            </Route>
+
             <Route path="/dashboard">
               {userRole === "admin" ? <Dashboard /> : <PageNotFound />}
             </Route>

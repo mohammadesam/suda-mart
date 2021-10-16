@@ -3,9 +3,13 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { add, getCart, remove } from "../features/cartSlice";
+import { selectTheme } from "../features/appSlice";
 function ProductCard({ image, title, price, description, _id, product }) {
+  // image rendering
   let buff = new Buffer.from(image.data.data);
   let base64Image = buff.toString("base64");
+
+  let theme = useSelector(selectTheme);
   let history = useHistory();
   let dispatch = useDispatch();
   let cartItems = useSelector(getCart);
@@ -23,7 +27,7 @@ function ProductCard({ image, title, price, description, _id, product }) {
   }, [cartItems]);
 
   return (
-    <Container>
+    <Container theme={theme}>
       <img
         src={`data:${image.contentType};base64,${base64Image}`}
         onClick={() => history.push(`/products/${_id}`)}
@@ -55,6 +59,8 @@ const Container = styled.div`
     width: 35%;
     margin: 1rem;
   }
+
+  background: #fff;
   min-width: 200px;
   display: flex;
   flex-direction: column;
@@ -66,6 +72,7 @@ const Container = styled.div`
   img {
     height: 150px;
     cursor: pointer;
+    margin: 0 15px;
   }
 
   h2 {
@@ -91,11 +98,11 @@ const Container = styled.div`
     .removeFromCartBtn {
       padding: 0 5px 0 0;
       font-weight: bold;
-      background: #085d55;
-      color: white;
-      border: none;
+      background: ${({ theme }) => theme.action};
+      color: ${({ theme }) => theme.primary};
+      border: solid 1px ${({ theme }) => theme.action};
       .badge {
-        background: white;
+        background: #fff;
         color: black;
         padding: 2px 7px;
         margin: 1px 10px 1px 1px;
@@ -116,17 +123,17 @@ const Container = styled.div`
     background: #fff;
     border-radius: 20px;
     padding: 3px 10px;
-    border: solid 1px #085d55;
+    border: solid 1px ${({ theme }) => theme.action};
     cursor: pointer;
     transition: 0.25s;
-    color: #085d55;
+    color: ${({ theme }) => theme.action};
     font-weight: bold;
     transform: scale(1.1);
 
     &:hover {
       transform: scale(1.2);
-      background: #085d55;
-      border-color: #085d55;
+      background: ${({ theme }) => theme.action};
+      border-color: ${({ theme }) => theme.action};
       color: white;
     }
   }

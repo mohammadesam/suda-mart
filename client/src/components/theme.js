@@ -6,10 +6,10 @@ export const DefaultTheme = createTheme({
       main: "#fff",
     },
     secondary: {
-      main: "#085D55",
+      main: "#5C54B7",
     },
     action: {
-      main: "#0FF4ED",
+      main: "#FD4056",
     },
     warning: {
       main: "#fff",
@@ -19,28 +19,28 @@ export const DefaultTheme = createTheme({
 
 export const DefaultThemeStyled = {
   primary: "#fff",
-  secondary: "#085D55",
-  action: "#0FF4ED",
-  contrast: "#000",
+  secondary: "#5C54B7",
+  action: "#FD4056",
+  contrast: "#fff",
 };
 
 export const DarkThemeStyled = {
-  primary: "#085D55",
-  secondary: "#0FF4ED",
-  action: "#fff",
-  contrast: "#0FF4ED",
+  primary: "#323757",
+  secondary: "#fff",
+  action: "#FD4056",
+  contrast: "#000",
 };
 
 export const DarkDefaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#085D55",
+      main: "#323757",
     },
     secondary: {
-      main: "#0FF4ED",
+      main: "#fff",
     },
     action: {
-      main: "#fff",
+      main: "#FD4056",
     },
     warning: {
       main: "#000",

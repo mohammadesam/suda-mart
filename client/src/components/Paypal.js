@@ -6,10 +6,16 @@ import { getCart } from "../features/cartSlice";
 import { addPunch } from "../features/cartSlice";
 import Cookies from "js-cookie";
 import ErrorPage from "./ErrorPage";
+import IconButton from "@material-ui/core/IconButton";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
+import Typography from "@material-ui/core/Typography";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Link } from "react-router-dom";
 const STYLE = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  flexDirection: "column",
   width: "100vw",
   height: "100vh",
 };
@@ -19,20 +25,55 @@ const style2 = {
   justifyContent: "center",
   alignItem: "center",
 };
+
+const buttonStyle = {
+  borderRadius: 5,
+  padding: "5px 10px",
+  background: "#FD4056",
+  color: "white",
+  width: 200,
+  height: 35,
+  "&:hover": {
+    opacity: 0.8,
+  },
+};
+
+const ArrowBackStyle = {
+  position: "absolute",
+  top: 5,
+  left: 8,
+};
+
 let PayPalButton;
-if (window.paypal != undefined) {
+if (window.paypal !== undefined) {
   PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
 }
 
 function Paypal() {
   let user =
-    Cookies.get("user") != undefined
+    Cookies.get("user") !== undefined
       ? JSON.parse(Cookies.get("user"))
       : undefined;
   console.log(user);
   let cart = useSelector(getCart);
   let history = useHistory();
   let dispatch = useDispatch();
+
+  const HandleTestOrder = async () => {
+    await fetch("/api/dashboard/orders/add", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        cartData: localStorage.getItem("cart"),
+        user: user._id,
+      }),
+    });
+    localStorage.removeItem("cart");
+    dispatch(addPunch([]));
+    history.push("success");
+  };
   const createOrder = () => {
     return fetch("/api/makeOrder", {
       method: "POST",
@@ -96,6 +137,9 @@ function Paypal() {
 
   return (
     <div style={STYLE}>
+      <Link to="/cart">
+        <ArrowBackIcon style={ArrowBackStyle} />
+      </Link>
       {PayPalButton === undefined ? (
         <ErrorPage msg="Failed to Load paypal page please check your connection and reload the page" />
       ) : (
@@ -106,6 +150,9 @@ function Paypal() {
           onError={(err) => onError(err)}
         />
       )}
+      <IconButton style={buttonStyle} onClick={HandleTestOrder}>
+        <LocalOfferIcon /> <Typography>Test for Free</Typography>
+      </IconButton>
     </div>
   );
 }

@@ -12,6 +12,8 @@ function ProductDetails() {
 
   useEffect(() => {
     async function getProduct() {
+      if (id === undefined || id === null)
+        setError("opps some thing went wrong, please try again");
       try {
         let response = await fetch(`/api/dashboard/product/${id}`);
         let productData = await response.json();

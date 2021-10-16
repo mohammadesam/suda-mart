@@ -71,7 +71,7 @@ Router.get("/short", async (req, res) => {
 });
 
 Router.post("/add", (req, res) => {
-  let { cartData, user } = req.body;
+  let { user } = req.body;
   let cart = JSON.parse(req.body.cartData);
   console.log(cart, user);
   let newOrder = new Order({
@@ -145,6 +145,18 @@ Router.get("/userOrders/:id", async (req, res) => {
     })
     .catch((err) => {
       res.send(err);
+    });
+});
+
+Router.get("/delete/:id", (req, res) => {
+  Order.deleteOne({ _id: req.params.id })
+    .then(() => {
+      console.log("order deleted successfully");
+      res.send("order deleted");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send("error");
     });
 });
 

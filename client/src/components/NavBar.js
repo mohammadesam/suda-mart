@@ -7,17 +7,18 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import Menu from "@material-ui/core/Menu";
-import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { DefaultTheme, DefaultThemeStyled, DarkThemeStyled } from "./theme";
 import { selectTheme, setTheme } from "../features/appSlice";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { Badge, MenuItem } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { login, getUser } from "../features/userSlice";
+import { login } from "../features/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../features/cartSlice";
 import Cookies from "js-cookie";
-
+import MobileView from "./navBar/mobileView";
+import Logo from "./navBar/Logo";
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.primary.main,
@@ -44,10 +45,22 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: "Bold",
     },
   },
+  MenuLinksTypography: {
+    flexGrow: 1,
+    "& > a": {
+      marginLeft: theme.spacing(3),
+      color: DefaultTheme.palette.action.main,
+    },
+    "& a": {
+      color: theme.palette.action.main,
+      fontWeight: "Bold",
+    },
+  },
   cartBadge: {
     "& > span": {
       background: theme.palette.secondary.main,
-      color: "#fff",
+      color: theme.palette.warning.main,
+      fontWeight: "bold",
     },
   },
 
@@ -129,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
 
 function NavBar({ changeTheme }) {
   let user =
-    Cookies.get("user") != undefined
+    Cookies.get("user") !== undefined
       ? JSON.parse(Cookies.get("user"))
       : undefined;
   let dispatch = useDispatch();
@@ -174,56 +187,14 @@ function NavBar({ changeTheme }) {
           {" "}
           <MenuIcon className={classes.menuIcon} />{" "}
         </IconButton>
-        <Typography variant="h5" className={classes.logoWarper}>
-          <svg
-            width="200mm"
-            height="40mm"
-            viewBox="0 0 200 40"
-            version="1.1"
-            id="svg8"
-            className={classes.logo}
-          >
-            <defs id="defs2">
-              <rect
-                x="145.8988"
-                y="32.505951"
-                width="251.73215"
-                height="76.351189"
-                id="rect52"
-              />
-            </defs>
-
-            <g id="layer1">
-              <text transform="matrix(1.0023843,0,0,1.3635115,-87.90392,-40.254967)">
-                <tspan x="145.89844" y="56.773093">
-                  <tspan>Suda Mart</tspan>
-                </tspan>
-              </text>
-              <path
-                d="m 7.2646356,37.562636 c -0.914063,-0.914064 -1.69101,-3.61425 -2.338299,-8.126489 -1.346043,-9.383237 -1.523552,-9.967099 -3.160385,-10.39514 -1.75266803,-0.458334 -1.93238503,-3.196305 -0.252124,-3.841081 0.657665,-0.25237 2.613692,-0.462663 4.346726,-0.467317 3.046403,-0.0082 3.32196,-0.222842 8.3034984,-6.4684513 2.833891,-3.552992 5.644697,-6.648849 6.246233,-6.87968 1.074153,-0.41219099 3.342309,0.931789 3.342309,1.980462 0,0.293689 -1.895483,2.973465 -4.212186,5.955056 l -4.212186,5.4210763 h 11.393733 c 6.266555,0 11.393736,-0.260058 11.393736,-0.577905 0,-0.317848 -1.754471,-2.746226 -3.898823,-5.3963963 -3.065354,-3.788421 -3.734848,-5.078907 -3.131773,-6.036678 1.630365,-2.58925999 3.152437,-1.678821 8.629949,5.162071 l 5.483929,6.8489083 h 3.547345 c 2.217467,0 3.897151,0.421492 4.48043,1.124301 1.1347,1.367231 0.482862,3.411413 -1.08781,3.411413 -1.264582,0 -1.354688,0.316712 -3.010985,10.583332 -0.789877,4.89607 -1.56962,7.482269 -2.45015,8.126489 -0.949412,0.694616 -6.159629,0.944941 -19.667908,0.944941 -16.728562,0 -18.4990964,-0.122748 -19.7452594,-1.368912 z M 19.216881,26.847276 c 0,-4.87839 -0.24072,-6.118173 -1.303396,-6.712876 -0.82684,-0.462723 -1.794225,-0.466733 -2.645833,-0.01097 -1.953882,1.045687 -1.986709,12.324816 -0.03905,13.414785 0.82684,0.462725 1.794226,0.466733 2.645833,0.01098 1.11237,-0.595321 1.342441,-1.743917 1.342441,-6.701909 z m 10.583334,0 c 0,-4.87839 -0.24072,-6.118173 -1.303396,-6.712876 -0.826841,-0.462723 -1.794226,-0.466733 -2.645833,-0.01097 -1.953884,1.045687 -1.986709,12.324816 -0.03905,13.414785 0.826841,0.462725 1.794227,0.466733 2.645833,0.01098 1.112372,-0.595321 1.342443,-1.743917 1.342443,-6.701909 z m 10.583333,0 c 0,-4.87839 -0.24072,-6.118173 -1.303395,-6.712876 -0.826842,-0.462723 -1.794227,-0.466733 -2.645834,-0.01097 -1.953884,1.045687 -1.986708,12.324816 -0.03905,13.414785 0.826842,0.462725 1.794227,0.466733 2.645833,0.01098 1.112372,-0.595321 1.342443,-1.743917 1.342443,-6.701909 z"
-                id="path1535"
-              />
-            </g>
-          </svg>
-        </Typography>
-        <Menu
-          id="menu"
+        <Logo classes={classes} />
+        {/*mobile menu Links*/}
+        <MobileView
+          classes={classes}
           anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={() => handleClose("mobile")}
-          className={classes.linksTypography}
-        >
-          <MenuItem onClick={handleClose}>
-            <Link to="/"> Home </Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link to="/products"> Products </Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link to="#"> About </Link>
-          </MenuItem>
-        </Menu>
+          handleClose={handleClose}
+        />
+        {/** Desktop  menu Links */}
         <Typography
           className={`${classes.sectionDesktop} ${classes.linksTypography}`}
         >
@@ -236,30 +207,23 @@ function NavBar({ changeTheme }) {
           <IconButton>
             <Badge badgeContent={cartItemsNumber} className={classes.cartBadge}>
               <Link to="/cart">
-                {" "}
-                <ShoppingCartIcon className={classes.cartIcon} />{" "}
+                <ShoppingCartIcon className={classes.cartIcon} />
               </Link>
             </Badge>
           </IconButton>
           {/** user Iamge or login button */}
           {user === undefined ? (
-            <Button
-              color="secondary"
-              className={classes.LoginButton}
-              href="/login"
-            >
-              Login
+            <Button color="secondary" className={classes.LoginButton}>
+              <Link to="/login"> Login </Link>
             </Button>
           ) : (
-            <>
-              <img
-                src="/logo192.png"
-                alt="user"
-                aria-label="userMenu"
-                className={classes.userImage}
-                onClick={(e) => handleClick(e, "user")}
-              />
-            </>
+            <img
+              src="/images/profilePhoto.svg"
+              alt="user Avatar"
+              aria-label="userMenu"
+              className={classes.userImage}
+              onClick={(e) => handleClick(e, "user")}
+            />
           )}
 
           {/** user Menu */}
@@ -268,28 +232,21 @@ function NavBar({ changeTheme }) {
             onClose={() => handleClose("user")}
             open={Boolean(userAnchor)}
             id="userMenu"
-            className={classes.linksTypography}
+            className={classes.MenuLinksTypography}
           >
             <MenuItem>
-              {" "}
-              <Link
-                to={
-                  user && user.role === "admin"
-                    ? "/dashboard"
-                    : `/dashboard/normal_user/`
-                }
-              >
-                {" "}
-                dashboard{" "}
-              </Link>{" "}
+              <Link to="/dashboard/normal_user/">Account</Link>
             </MenuItem>
+            {user && user.role === "admin" ? (
+              <MenuItem>
+                <Link to="/dashboard"> Dashboard </Link>
+              </MenuItem>
+            ) : null}
             <MenuItem>
-              {" "}
-              <a href="/api/users/logout">Logout</a>{" "}
+              <a href="/api/users/logout">Logout</a>
             </MenuItem>
           </Menu>
         </div>
-
         <IconButton onClick={handleThemeChange} className={classes.themeIcon}>
           <Brightness3Icon className={classes.themeIcon} />
         </IconButton>

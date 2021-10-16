@@ -121,9 +121,10 @@ const SideBar = styled.div`
     div {
       @media screen and (max-width: 960px) {
         height: 100%;
-        padding: 2rem 3rem;
+        padding: 2rem 1rem;
         margin: 0 !important;
         align-items: center;
+        justify-content: center;
       }
       display: flex;
       width: 100%;
