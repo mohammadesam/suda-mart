@@ -64,11 +64,11 @@ const Container = styled.div`
   min-width: 200px;
   display: flex;
   flex-direction: column;
-  width: 20%;
+  width: 25%;
   margin: 3rem 2rem;
   height: 340px;
   box-shadow: 0px 10px 20px rgb(0 0 0 / 20%);
-  //border: solid 1px black;
+  padding: 5px 0 0 0;
   img {
     height: 150px;
     cursor: pointer;

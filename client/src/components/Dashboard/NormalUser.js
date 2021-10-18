@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   ordersContainer: {
     padding: "0 5vw",
     display: "flex",
+    justifyContent: "space-between",
   },
   orderLabel: {
     marginLeft: 5,
@@ -74,6 +75,7 @@ function NormalUser() {
   let [orders, setOrders] = useState([]);
   let [loading, setLoading] = useState(true);
   let [error, setError] = useState(null);
+  let [totalPaid, setTotalPaid] = useState(0);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -87,8 +89,10 @@ function NormalUser() {
           `/api/dashboard/orders/userOrders/${user && user._id}`
         );
         let userOrders = await response.json();
-
+        // resting the variable each fetch
+        setTotalPaid(0);
         let formattedOrders = userOrders.map((order) => {
+          setTotalPaid((current) => current + (order.total || 0));
           return { ...order, date: getTimePassed(order.date) };
         });
         setOrders(formattedOrders);
@@ -126,13 +130,22 @@ function NormalUser() {
       <ThemeProvider theme={DefaultTheme}>
         <Container className={classes.header}>
           <Typography>
-            <img src="/logo192.png" alt="user" className={classes.userIcon} />
+            <img
+              src="/images/profile-photo.svg"
+              alt="user"
+              className={classes.userIcon}
+            />
           </Typography>
           <Typography variant="h4"> Hello {user.name} </Typography>
         </Container>
         <Container className={classes.ordersContainer}>
-          <List />
-          <Typography className={classes.orderLabel}> Orders </Typography>
+          <div style={{ display: "flex" }}>
+            <List />
+            <Typography className={classes.orderLabel}> Orders </Typography>
+          </div>
+          <Typography variant="h5" classes>
+            Total Spent: {" $" + totalPaid}
+          </Typography>
         </Container>
 
         <ol className={classes.listContainer}>
@@ -145,15 +158,15 @@ function NormalUser() {
                   onClick={() => openDetailsMenu(order._id)}
                 >
                   <div>
-                    {" "}
-                    <b>{index + 1}.</b>{" "}
+                    <b>{index + 1}.</b>
                   </div>
                   <div> {order.products.length} Products </div>
                   <div>
-                    {" "}
                     <Chip color="#g23" label={order.status} />
                   </div>
-                  <div> ${order.total || "not set"} </div>
+                  <div>
+                    ${Math.floor(Number(order.total) * 100) / 100 || "not set"}
+                  </div>
                   <div> {order.date} </div>
                 </li>
                 <hr />
@@ -197,6 +210,8 @@ function getTimePassed(date) {
   //let years = Math.floor(diff / (1000 * 60 * 60 * 24 * 30 * 12) )
 
   let time = [min, hours, days, weeks, months];
+
+  if (min.value < 1) return "Just Now";
   for (let i = 0; i < time.length; i++) {
     let one = time[i];
     if (one.value === 0) {
@@ -204,6 +219,5 @@ function getTimePassed(date) {
     }
   }
 
-  if (min < 1) return "Just Now";
   return `${time[time.length - 1].value} ${time[time.length - 1].name}`;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../features/appSlice";
+import { Link } from "react-router-dom";
 function Home() {
   let theme = useSelector(selectTheme);
 
@@ -14,7 +15,10 @@ function Home() {
             we are The greatest market in sudan, with cheap prices, high quality
             and large stock, and fast services
           </Description>
-          <Button theme={theme}> Get Offers </Button>
+          <Button theme={theme}>
+            {" "}
+            <Link to="/products">Get Offers</Link>{" "}
+          </Button>
         </LeftSide>
         <RightSide>
           <img src="\images\LandingPageIllustration.png" alt="suda mart Logo" />
@@ -102,6 +106,10 @@ const Button = styled.a`
   &:hover {
     background: ${({ theme }) => theme.action};
     color: black;
+  }
+
+  & > a {
+    color: ${({ theme }) => theme.contrast};
   }
 `;
 

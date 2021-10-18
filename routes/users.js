@@ -57,13 +57,18 @@ Router.get("/", (req, res) => {
 });
 
 Router.post("/login", passport.authenticate("local"), (req, res) => {
+  if (!req.user)
+    return res.json({
+      success: false,
+      msg: "your email or password are not correct please check them and try again",
+    });
+
+  // if user successfully logged in
   let { name, email, role, _id } = req.user;
   res.cookie("user", JSON.stringify({ name, email, role, _id }), {
     maxAge: 6000000,
   });
-  console.log(req.user);
-  if (!req.user) res.redirect("http://localhost:3000/login?msg=error");
-  else res.redirect("http://localhost:3000/");
+  res.send({ success: true });
 });
 
 Router.post("/register", async (req, res) => {

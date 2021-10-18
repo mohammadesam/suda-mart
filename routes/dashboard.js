@@ -66,6 +66,30 @@ Router.post("/deleteProduct", (req, res) => {
   });
 });
 
+Router.post("/product/update/:id", (req, res) => {
+  let { title, label, color, price, stock, description } = req.body;
+  Product.findByIdAndUpdate(
+    req.params.id,
+    {
+      title,
+      label,
+      description,
+      color,
+      stock,
+      price,
+    },
+    { useFindAndModify: false }
+  )
+    .then(() => {
+      console.log("product updated");
+      res.json({ success: true });
+    })
+    .catch((err) => {
+      res.send({ success: false, msg: "error happened" });
+      console.log(err);
+    });
+});
+
 function deleteFile(filename) {
   fs.unlinkSync(filename);
 }

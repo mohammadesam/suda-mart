@@ -47,7 +47,7 @@ function Checkout() {
           </div>
           <div key="11">
             <label> address </label>
-            <textarea value={address} onChange={(e) => handleAddress()}>
+            <textarea value={address} onChange={(e) => handleAddress(e)}>
               {" "}
             </textarea>
           </div>

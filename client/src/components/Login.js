@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import Alert from "@material-ui/lab/Alert";
+
 function Login({ type }) {
   const [password, setPassword] = useState("");
   const [matchedPassword, setMatchedPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  let [error, setError] = useState(null);
   const history = useHistory();
   function handlePasswordMatch(e, mode) {
     if (mode === "set") setPassword(e.target.value);
@@ -13,6 +17,35 @@ function Login({ type }) {
     }
   }
 
+  const handleLogIn = (e) => {
+    e.preventDefault();
+    fetch("/api/users/login/", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    }).then(async (response) => {
+      if (response.status !== 200) {
+        return setError(
+          "your email or password are not correct please check them and try again"
+        );
+      } else {
+        let data = await response.json();
+        if (!data.success)
+          setError(
+            "your email or password are not correct please check them and try again"
+          );
+        else {
+          document.location.href = "/";
+        }
+      }
+    });
+  };
+
   const handleGoBack = () => {
     history.push("/");
   };
@@ -20,12 +53,19 @@ function Login({ type }) {
     return (
       <Container>
         <ArrowBackIcon onClick={handleGoBack} />
+        {error ? (
+          <Alert severity="error" variant="filled">
+            your email or password are not correct please check them and try
+            again
+          </Alert>
+        ) : null}
         <FormWarper>
           <h1> Login </h1>
-          <form action="/api/users/login" method="POST">
+          <form onSubmit={handleLogIn} method="POST">
             <div>
               <input
                 required
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 name="email"
                 placeholder="Enter Your Email"
@@ -35,6 +75,7 @@ function Login({ type }) {
               <input
                 required
                 type="password"
+                onChange={(e) => setPassword(e.target.value)}
                 name="password"
                 placeholder="Password"
               />
@@ -58,7 +99,7 @@ function Login({ type }) {
         <ArrowBackIcon onClick={handleGoBack} />
         <FormWarper>
           <h1>Register</h1>
-          <form action="/api/users/register" method="POST">
+          <form method="POST">
             <input
               required
               type="text"
@@ -119,6 +160,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   background: #fff;
   padding: 2rem 0;
 

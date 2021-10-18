@@ -11,7 +11,7 @@ function AddProduct({ closeMenu }) {
         action="/api/dashboard/product"
         enctype="multipart/form-data"
       >
-        <input type="text" name="title" placeholder="Product Name" />
+        <input type="text" required name="title" placeholder="Product Name" />
         <input type="text" name="label" placeholder="Product Label" />
         <input type="file" name="image" />
         <input type="text" name="color" placeholder="Product Color" />
@@ -21,8 +21,14 @@ function AddProduct({ closeMenu }) {
           step="0.1"
           min="0.1"
           placeholder="Price"
+          required
         />
-        <input type="number" name="quantity" placeholder="Product quantity" />
+        <input
+          type="number"
+          required
+          name="quantity"
+          placeholder="Product quantity"
+        />
         <input
           type="text"
           className="double"

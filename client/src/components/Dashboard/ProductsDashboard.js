@@ -17,6 +17,8 @@ import Alert from "@material-ui/lab/Alert";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
+import EditIcon from "@material-ui/icons/Edit";
+import UpdateProduct from "./UpdateProduct";
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,
@@ -194,6 +196,21 @@ function ProductsDashboard() {
     },
 
     {
+      field: "Edit",
+      headerName: "edit",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <EditIcon
+            onClick={() => handleUpdateProduct(params.id)}
+            styles={{ width: 40, height: 40, cursor: "pointer" }}
+          />
+        );
+      },
+      editable: false,
+      width: 120,
+    },
+    {
       field: "images",
       headerName: "delete",
       align: "center",
@@ -214,6 +231,15 @@ function ProductsDashboard() {
   const [alert, setAlert] = useState(false);
   const [dialog, setDialog] = useState(false);
   let [addProductMenu, toggleAddProductMenu] = useState(false);
+  let [updateProductMenu, toggleUpdateProductMenu] = useState(false);
+
+  const handleUpdateProduct = (id) => {
+    toggleUpdateProductMenu(id);
+  };
+
+  function handleCloseUpdateMenu() {
+    toggleUpdateProductMenu(false);
+  }
 
   const handleAddProduct = () => {
     toggleAddProductMenu(!addProductMenu);
@@ -274,6 +300,11 @@ function ProductsDashboard() {
     }
     getProducts();
   }, [alert]);
+  if (updateProductMenu) {
+    return (
+      <UpdateProduct closeMenu={handleCloseUpdateMenu} id={updateProductMenu} />
+    );
+  }
   return (
     <Container1>
       <DashboardSidebar selectedId={1} />

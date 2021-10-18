@@ -21,6 +21,10 @@ Router.get("/detailed/:id", async (req, res) => {
     });
   }
 
+  const productsTotalPrice = products.reduce(
+    (sum, product) => sum + product.product.price * product.quantity,
+    0
+  );
   let currentOrder = {
     _id: orderData._id,
     status: orderData.status,
@@ -28,10 +32,7 @@ Router.get("/detailed/:id", async (req, res) => {
     products,
     user,
     title: products.reduce((sum, product) => sum + product.quantity, 0),
-    price: products.reduce(
-      (sum, product) => sum + product.product.price * product.quantity,
-      0
-    ),
+    price: Math.floor(productsTotalPrice * 100) / 100,
   };
   detailedOrders.push(currentOrder);
   res.json(detailedOrders);
@@ -52,6 +53,10 @@ Router.get("/short", async (req, res) => {
       });
     }
 
+    let productsTotalPrice = products.reduce(
+      (sum, product) => sum + product.product.price * product.quantity,
+      0
+    );
     let currentOrder = {
       id: orderData._id,
       status: orderData.status,
@@ -59,10 +64,7 @@ Router.get("/short", async (req, res) => {
         products.reduce((sum, product) => sum + product.quantity, 0) +
         " products",
       date: orderData.date,
-      price: products.reduce(
-        (sum, product) => sum + product.product.price * product.quantity,
-        0
-      ),
+      price: Math.floor(productsTotalPrice * 100) / 100,
       user: user.name,
     };
     detailedOrders.push(currentOrder);
@@ -191,13 +193,14 @@ function getTimePassed(date) {
   //let years = Math.floor(diff / (1000 * 60 * 60 * 24 * 30 * 12) )
 
   let time = [min, hours, days, weeks, months];
+  console.log(min.value);
+  if (min.value < 1) return "Just Now";
+
   for (let i = 0; i < time.length; i++) {
     let one = time[i];
     if (one.value === 0) {
       return `${time[i - 1].value} ${time[i - 1].name}`;
     }
   }
-
-  if (min < 1) return "Just Now";
   return `${time[time.length - 1].value} ${time[time.length - 1].name}`;
 }
