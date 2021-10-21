@@ -84,6 +84,9 @@ app.use("/api/users", userRouter);
 app.use("/api/dashboard/orders", orderRouter);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/statics", staticsRoute);
+
+//static
+app.use(express.static("/client/build"));
 //db
 mongoose.connect(process.env.DATA_BASE_URL, {
   useNewUrlParser: true,
@@ -171,7 +174,7 @@ app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
 
 if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "/client/build"));
+    res.sendFile("index.html");
   });
 }
 
