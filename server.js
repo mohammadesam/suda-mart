@@ -171,7 +171,7 @@ app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
 
 if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
-    res.sendFile(path.json(__dirname, "/build"));
+    res.sendFile(path.join(__dirname, "/build"));
   });
 }
 
