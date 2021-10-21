@@ -49,8 +49,6 @@ Router.post("/register", async (req, res) => {
   if (matchEmail != undefined) {
     return res.redirect("http://localhost:3000/login?msg=registered");
   } else {
-    console.log(req.body);
-
     let hashedPassword = await bcrypt.hash(req.body.password, 10);
     let newUser = new user({
       _id: mongoose.Types.ObjectId(),
