@@ -86,7 +86,7 @@ app.use("/api/dashboard", dashboardRoute);
 app.use("/api/statics", staticsRoute);
 
 //static
-app.use(express.static("/client/build"));
+app.use(express.static(path.join(__dirname, "/client/build/")));
 //db
 mongoose.connect(process.env.DATA_BASE_URL, {
   useNewUrlParser: true,
