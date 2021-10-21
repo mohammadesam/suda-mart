@@ -68,7 +68,7 @@ Router.post("/register", async (req, res) => {
 Router.get("/logout", (req, res) => {
   req.logOut();
   res.clearCookie("user");
-  res.redirect("http://localhost:3000");
+  res.redirect("/");
 });
 
 module.exports = Router;
