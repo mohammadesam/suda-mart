@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-function StaticCard({ className }) {
+function StaticCard({ className, statics }) {
+  let staticName = Object.keys(statics)[0];
+  let data = statics[staticName];
+  let dataPercent = statics.percent || "47";
   return (
     <Container className={className}>
       <div>
-        <p> Profits </p>
-        <h1> $75 </h1>
+        <p> {staticName} </p>
+        <h1> {data} </h1>
       </div>
-      <p> +12%🔼 </p>
+      <p> {`${dataPercent}%`} </p>
     </Container>
   );
 }

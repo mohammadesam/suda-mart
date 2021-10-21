@@ -13,7 +13,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import OrderDetails from "./orderDetails";
-import { yellow, green } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import SeeMoreIcon from "@material-ui/icons/MoreHoriz";
 import AirportShuttleIcon from "@material-ui/icons/AirportShuttle";
 import PaymentIcon from "@material-ui/icons/Payment";

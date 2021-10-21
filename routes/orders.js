@@ -5,6 +5,19 @@ const Products = require("../models/product");
 const Users = require("../models/user");
 const mongoose = require("mongoose");
 
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+function AuthorizeAdmin(req, res, next) {
+  if (req.user.role !== "admin") return res.redirect("/404");
+  next();
+}
+
 Router.get("/detailed/:id", async (req, res) => {
   let detailedOrders = [];
   const orderData = await Order.findById(req.params.id);
@@ -96,6 +109,7 @@ Router.post("/add", (req, res) => {
     .then(() => {
       console.log("order saved");
       cart.map((product) => {
+        // update stock
         Products.findOneAndUpdate(
           { _id: product._id },
           {
@@ -105,7 +119,17 @@ Router.post("/add", (req, res) => {
         ).then(() => {
           console.log("product stock number updated");
         });
-
+        // update product number of orders
+        Products.findOneAndUpdate(
+          { _id: product._id },
+          {
+            $inc: { numberOfOrders: product.quantity },
+          },
+          { useFindAndModify: false }
+        ).then(() => {
+          console.log("user orders number updated");
+        });
+        // update user number of orders
         Products.findOneAndUpdate(
           { _id: product._id },
           {
@@ -124,7 +148,7 @@ Router.post("/add", (req, res) => {
     });
 });
 
-Router.get("/deliver/:id", (req, res) => {
+Router.get("/deliver/:id", checkAuthentication, AuthorizeAdmin, (req, res) => {
   if (req.params.id === undefined) res.status(500).send("bad id");
   Order.findByIdAndUpdate(
     req.params.id,
@@ -150,7 +174,7 @@ Router.get("/userOrders/:id", async (req, res) => {
     });
 });
 
-Router.get("/delete/:id", (req, res) => {
+Router.get("/delete/:id", checkAuthentication, AuthorizeAdmin, (req, res) => {
   Order.deleteOne({ _id: req.params.id })
     .then(() => {
       console.log("order deleted successfully");

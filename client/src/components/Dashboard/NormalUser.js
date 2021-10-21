@@ -144,7 +144,7 @@ function NormalUser() {
             <Typography className={classes.orderLabel}> Orders </Typography>
           </div>
           <Typography variant="h5" classes>
-            Total Spent: {" $" + totalPaid}
+            Total Spent: {" $" + Math.round(totalPaid *100) / 100}
           </Typography>
         </Container>
 

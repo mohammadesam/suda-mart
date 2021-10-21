@@ -60,6 +60,7 @@ const Container = styled.div`
   flex-direction: column;
   overflow-x: hidden;
   position: relative;
+  min-height: 100vh;
   top: 70px;
   background: ${({ theme }) => theme.primary};
 `;

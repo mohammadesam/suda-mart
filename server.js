@@ -7,7 +7,13 @@ const paypal = require("@paypal/checkout-server-sdk");
 const userRouter = require("./routes/users");
 const dashboardRoute = require("./routes/dashboard");
 const orderRouter = require("./routes/orders");
+const staticsRoute = require("./routes/statics");
 const cors = require("cors");
+const user = require("./models/user");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const session = require("express-session");
 
 const Environment =
   process.env.NODE_ENV === "production"
@@ -25,11 +31,59 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
+// passport initialize
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    maxAge: null,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(
+  new LocalStrategy(
+    { usernameField: "email", passwordField: "password" },
+    (username, password, done) => {
+      user.findOne({ email: username }, async (err, user) => {
+        if (err) return done(err);
+        if (!user) {
+          return done(null, false, { message: "incorrect email" });
+        }
+        let validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+          return done(null, false, { message: "incorrect password" });
+        }
+        return done(null, user);
+      });
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  user.findById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
 // routes import
 app.use("/api/users", userRouter);
 app.use("/api/dashboard/orders", orderRouter);
 app.use("/api/dashboard", dashboardRoute);
-
+app.use("/api/statics", staticsRoute);
 //db
 mongoose.connect(process.env.DATA_BASE_URL, {
   useNewUrlParser: true,
@@ -48,7 +102,7 @@ app.get("/", (req, res) => {
 });
 
 // payPal order
-app.post("/api/makeOrder", async (req, res) => {
+app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
   // request data
   const totalAmount = req.body.items.reduce(
     (sum, item) => sum + item.quantity * item.price,

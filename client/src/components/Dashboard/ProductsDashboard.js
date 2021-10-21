@@ -19,6 +19,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import EditIcon from "@material-ui/icons/Edit";
 import UpdateProduct from "./UpdateProduct";
+import { Link } from "react-router-dom";
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,
@@ -39,7 +40,6 @@ const useStyle = makeStyles((theme) => ({
 
     [theme.breakpoints.up("md")]: {
       width: "calc(100vw - 60px)",
-      position: "relative",
       height: "100%",
       margin: 0,
     },
@@ -59,6 +59,7 @@ const useStyle = makeStyles((theme) => ({
   },
 
   Title: {
+    marginTop: 30,
     [theme.breakpoints.down("md")]: {
       padding: 8,
       "& > h2": {
@@ -107,58 +108,6 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-let getID = (params) => {
-  console.log(params);
-  return params.id;
-};
-
-// let PRODUCTS = [
-//   {
-//     id: 1,
-//     title: "Sport shoe",
-//     image: 1,
-//     price: 12.99,
-//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     color: "red",
-//     label: ["shoes", "sport"],
-//     numberOfOrders: 4,
-//     stock: 12,
-//   },
-
-//   {
-//     id: 2,
-//     title: "Watch",
-//     image: 2,
-//     price: 82.99,
-//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     color: "gold",
-//     label: ["accus", "clothes"],
-//     numberOfOrders: 15,
-//     stock: 1,
-//   },
-//   {
-//     id: 3,
-//     title: "Shampoo",
-//     image: 4,
-//     price: 9.99,
-//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     color: "white",
-//     label: ["clean", "body"],
-//     numberOfOrders: 15,
-//     stock: 8,
-//   },
-//   {
-//     id: 4,
-//     title: "Blue man Perfume",
-//     image: 5,
-//     price: 99.75,
-//     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     color: "red",
-//     label: ["perfume", "casual"],
-//     numberOfOrders: 15,
-//     stock: 12,
-//   },
-// ];
 
 function ProductsDashboard() {
   const columns = [
@@ -325,11 +274,7 @@ function ProductsDashboard() {
                 <Typography variant="h2">Products</Typography>
                 <Button onClick={handleAddProduct}> Add Product </Button>
               </Container>
-              <Container className={classes.cardsContainer}>
-                {[0, 0, 0, 0].map((item, index) => {
-                  return <StaticCard key={index} />;
-                })}
-              </Container>
+
               {dialog ? (
                 <Dialog open={Boolean(dialog)} onClose={handleDialogClose}>
                   <DialogTitle>
@@ -362,6 +307,25 @@ function ProductsDashboard() {
                   </DialogActions>
                 </Dialog>
               ) : null}
+              {/* Back Home Link */}
+              <Link
+                to="/"
+                style={{ position: "absolute", top: "0.5rem", right: "1rem" }}
+              >
+                <svg
+                  aria-hidden="true"
+                  role="img"
+                  width="25"
+                  height="25"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 1024 1024"
+                >
+                  <path
+                    d="M946.5 505L534.6 93.4a31.93 31.93 0 0 0-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3c0 35.3 28.7 64 64 64h43.4V908c0 17.7 14.3 32 32 32H448V716h112v224h265.9c17.7 0 32-14.3 32-32V614.3h43.4c17 0 33.3-6.7 45.3-18.8c24.9-25 24.9-65.5-.1-90.5z"
+                    fill="black"
+                  />
+                </svg>
+              </Link>
               <Container className={classes.tableContainer}>
                 {products && (
                   <DataGrid

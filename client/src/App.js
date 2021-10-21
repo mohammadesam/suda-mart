@@ -78,6 +78,9 @@ function App() {
             <Route path="/register">
               <Login type="register" />
             </Route>
+            <Route path="/404">
+              <PageNotFound />
+            </Route>
             <Route path="/">
               <NavBar changeTheme={handleThemeChange} /> <Home />
             </Route>

@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import StaticCard from "./StaticCard";
 import Chart from "../Chart";
 function GeneralView() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function getStatics() {
+      let response = await fetch("/api/statics/profits");
+      let statics = await response.json();
+      setData(statics);
+      console.log(statics);
+    }
+    getStatics();
+  }, []);
   return (
     <>
       <TopPart>
@@ -25,8 +36,8 @@ function GeneralView() {
         </Link>
       </TopPart>
       <Cards>
-        {[1, 1, 1, 1].map((item, index) => {
-          return <StaticCard key={index} />;
+        {data.map((item, index) => {
+          return <StaticCard key={index} statics={item} />;
         })}
       </Cards>
       <ChartContainer>
