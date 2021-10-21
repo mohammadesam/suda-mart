@@ -94,6 +94,7 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 0 0.9rem 0 11px;
     transition: 0.25s;
+    word-wrap: break-word;
 
     .removeFromCartBtn {
       padding: 0 5px 0 0;
