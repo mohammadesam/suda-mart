@@ -61,7 +61,7 @@ Router.post(
       .then(() => {
         console.log("product add successfully");
         deleteFile(path.join(req.file.destination + req.file.filename));
-        res.redirect("http://localhost:3000/dashboard/products");
+        res.redirect("/dashboard/products");
       })
       .catch((err) => console.log("something went wrong", err));
   }

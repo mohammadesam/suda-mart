@@ -47,7 +47,7 @@ Router.post("/login", passport.authenticate("local"), (req, res) => {
 Router.post("/register", async (req, res) => {
   let matchEmail = await user.findOne({ email: req.body.email });
   if (matchEmail != undefined) {
-    return res.redirect("http://localhost:3000/login?msg=registered");
+    return res.redirect("/login?msg=registered");
   } else {
     let hashedPassword = await bcrypt.hash(req.body.password, 10);
     let newUser = new user({
@@ -60,7 +60,7 @@ Router.post("/register", async (req, res) => {
 
     newUser.save().then(() => {
       console.log("successfully registered");
-      res.redirect("http://localhost:3000/login");
+      res.redirect("/login");
     });
   }
 });

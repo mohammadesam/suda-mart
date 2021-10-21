@@ -156,8 +156,7 @@ Router.get("/deliver/:id", checkAuthentication, AuthorizeAdmin, (req, res) => {
     { useFindAndModify: false }
   )
     .then(() => {
-      console.log("order updated");
-      res.redirect("http://localhost:3000/dashboard/orders");
+      res.redirect("/dashboard/orders");
     })
     .catch((err) => {
       console.log(err);
