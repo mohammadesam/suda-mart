@@ -14,7 +14,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const session = require("express-session");
-
+const path = require("path");
 const Environment =
   process.env.NODE_ENV === "production"
     ? paypal.core.LiveEnvironment
