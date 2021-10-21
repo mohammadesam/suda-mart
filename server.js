@@ -97,9 +97,6 @@ db.once("open", () => {
 });
 
 // routes
-app.get("/", (req, res) => {
-  res.send("|hello from /");
-});
 
 // payPal order
 app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
@@ -171,6 +168,12 @@ app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
     orderId: order.result.id,
   });
 });
+
+if (process.env.NODE_ENV === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.json(__dirname, "/build"));
+  });
+}
 
 const PORT = process.env.PORT || 3500;
 app.listen(PORT, console.log(`listing at port ${PORT}`));
