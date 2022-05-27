@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { remove, addOne, changeAmount } from "../features/cartSlice";
+import { remove, addOne } from "../features/cartSlice";
 import { useDispatch } from "react-redux";
+import { Buffer } from "buffer";
+
 function CartItem({ _id, title, image, price, quantity }) {
   let dispatch = useDispatch();
 
@@ -13,12 +15,15 @@ function CartItem({ _id, title, image, price, quantity }) {
   let handleDelete = () => {
     dispatch(remove(_id));
   };
-  let buff = new Buffer.from(image.data.data);
+  let buff = Buffer.from(image.data.data);
   let base64Image = buff.toString("base64");
   return (
     <Container>
       <div>
-        <img src={`data: ${image.contentType};base64,${base64Image}`} />
+        <img
+          src={`data: ${image.contentType};base64,${base64Image}`}
+          alt={title}
+        />
         <div className="details">
           <h5> {title} </h5>
           <span>

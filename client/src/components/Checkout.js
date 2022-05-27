@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useHistory, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
-let countries = ["sudan", "egypt", "Ganaa", "somaila", "UK", "US"];
+import Map from "./Map";
+
+// let countries = ["sudan", "egypt", "Ganaa", "somaila", "UK", "US"];
 
 function Checkout() {
-  let history = useHistory();
-  let [address, setAddress] = useState("");
+  let navigate = useNavigate();
   let totalPrice = Math.floor(useParams().total * 100) / 100;
+  const shippingCost = 8;
   let user = useSelector(getUser);
+
   function makePayment(e) {
     e.preventDefault();
-    history.push(`/checkout/paypal/${totalPrice}`);
+    navigate(`/checkout/paypal/${shippingCost}`);
   }
 
-  function handleAddress(e) {
-    setAddress(e.target.value);
-  }
   return (
     <Container>
       <h1> Check Out </h1>
@@ -31,45 +31,28 @@ function Checkout() {
       )}
       <form>
         <CountryDetails>
-          <h3 style={{ color: "#2053cd" }}> Location Details </h3>
-          <div key="10">
-            <label> Country </label>
-            <select>
-              {countries.map((country, index) => {
-                return (
-                  <option value={country} key={index}>
-                    {" "}
-                    {country}{" "}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div key="11">
-            <label> address </label>
-            <textarea value={address} onChange={(e) => handleAddress(e)}>
-              {" "}
-            </textarea>
-          </div>
+          <h3 style={{ color: "#2053cd" }}> Select Your Location </h3>
+          <Map width="360px" height="300px" />
         </CountryDetails>
         <Sammary>
           <h3> Summary </h3>
           <div key="1">
             <span> shipping cost </span>
-            <span className="bold"> $0 </span>
+            <span className="bold"> {shippingCost} AED</span>
           </div>
 
           <div key="2">
             {" "}
-            <span>total Bill </span> <span className="bold">${totalPrice}</span>{" "}
+            <span>Total Bill </span>{" "}
+            <span className="bold">{totalPrice} AED</span>{" "}
           </div>
           <div>
             <span>discount </span> <span className="bold"> 0% </span>
           </div>
           <div key="3">
             {" "}
-            <span>total To Pay</span>{" "}
-            <span className="bold"> ${totalPrice} </span>{" "}
+            <span>Total To Pay</span>{" "}
+            <span className="bold"> {totalPrice + shippingCost} AED</span>{" "}
           </div>
           <button
             disabled={!Boolean(user)}

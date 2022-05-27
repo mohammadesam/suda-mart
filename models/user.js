@@ -10,6 +10,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  rates: [
+    {
+      productID: String,
+      rate: Number,
+    },
+  ],
 });
 
 module.exports = mongoose.model("user", UserSchema);

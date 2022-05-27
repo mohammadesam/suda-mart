@@ -1,101 +1,84 @@
 import React, { useState } from "react";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Alert from "@material-ui/lab/Alert";
-import Register from "./Register";
 
-function Login({ type }) {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  let [error, setError] = useState(null);
+//
+const Register = ({ setPassword, password }) => {
+  const [matchedPassword, setMatchedPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogIn = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    fetch("/api/users/login/", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    }).then(async (response) => {
-      setLoading(false);
-      if (response.status !== 200) {
-        return setError(
-          "your email or password are not correct please check them and try again"
-        );
-      } else {
-        let data = await response.json();
-        if (!data.success)
-          setError(
-            "your email or password are not correct please check them and try again"
-          );
-        else {
-          document.location.href = "/";
-        }
-      }
-    });
-  };
+  function handlePasswordMatch(e, mode) {
+    if (mode === "set") setPassword(e.target.value);
+    else if (mode === "match") {
+      return setMatchedPassword(e.target.value === password);
+    }
+  }
 
   const handleGoBack = () => {
     navigate("/", { replace: true });
   };
-  if (type === "login") {
-    return (
-      <Container>
-        <ArrowBackIcon onClick={handleGoBack} />
-        {error ? (
-          <Alert severity="error" variant="filled">
-            your email or password are not correct please check them and try
-            again
-          </Alert>
-        ) : null}
-        <FormWarper>
-          <h1> Login </h1>
-          <form onSubmit={handleLogIn} method="POST">
-            <div>
-              <input
-                required
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                name="email"
-                placeholder="Enter Your Email"
-              />
-            </div>
-            <div>
-              <input
-                required
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-                placeholder="Password"
-              />
-            </div>
 
-            <div className="checkbox">
-              <input type="checkbox" name="stayLoggedIn" />
-              <label>Keep Me Logged In</label>
-            </div>
+  return (
+    <Container>
+      <ArrowBackIcon onClick={handleGoBack} />
+      <FormWarper>
+        <h1>Register</h1>
+        <form method="POST">
+          <input
+            required
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+          />
+          <input type="text" name="lastName" placeholder="Last Name" />
 
-            <button type="submit">{loading ? "Logging in..." : "Login"}</button>
-            <p> or </p>
-          </form>
-          <Link to="/register">Back To Register</Link>
-        </FormWarper>
-      </Container>
-    );
-  } else {
-    return <Register setPassword={setPassword} password={password} />;
-  }
-}
+          <input
+            required
+            type="email"
+            name="email"
+            placeholder="Enter Your Email"
+          />
+          <select>
+            Gender
+            <option value="male"> Male </option>
+            <option value="female"> Female </option>
+          </select>
 
-export default Login;
+          <input
+            required
+            type="password"
+            name="password"
+            placeholder="Password"
+            minLength="7"
+            onChange={(e) => handlePasswordMatch(e, "set")}
+          />
+          <input
+            type="password"
+            name="password2"
+            placeholder="Repeat Password"
+            minLength="7"
+            required
+            className={matchedPassword ? "matched" : "notValid"}
+            onChange={(e) => handlePasswordMatch(e, "match")}
+          />
+
+          <div className="checkbox">
+            <input type="checkbox" name="stayLoggedIn" />
+            <label>Keep Me Logged In</label>
+          </div>
+
+          <button type="submit"> Sign Up </button>
+          <p> or </p>
+        </form>
+        <Link to="/login">Back To Login</Link>{" "}
+      </FormWarper>
+    </Container>
+  );
+};
+
+export default Register;
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;

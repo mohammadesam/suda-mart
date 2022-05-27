@@ -18,7 +18,9 @@ let ProductSchema = new mongoose.Schema({
     data: Buffer,
     contentType: String,
   },
-  label: String,
+  label: [String],
+  rates: [{ user: String, rating: Number }],
+  offer: { available: Boolean, percent: Number },
 });
 
 module.exports = mongoose.model("products", ProductSchema);

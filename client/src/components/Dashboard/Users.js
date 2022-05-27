@@ -3,7 +3,6 @@ import DashboardSidebar from "./DashboardSidebar";
 import Container from "@material-ui/core/Container";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { dashboardTheme } from "../theme";
-import StaticCard from "./StaticCard";
 import { Typography } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -11,6 +10,7 @@ import Chip from "@material-ui/core/Chip";
 import Alert from "@material-ui/lab/Alert";
 import ConfirmDialog from "./ConfirmDialog";
 import { Link } from "react-router-dom";
+
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,
@@ -76,45 +76,6 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-
-let deleteProduct = () => {
-  alert("hi");
-};
-
-let PRODUCTS = [
-  {
-    id: 1,
-    firstName: "ali",
-    lastName: "ahmad",
-    email: "hello@gmail.com",
-    role: "admin",
-    numberOfOrders: 5,
-  },
-
-  {
-    id: 2,
-    name: "ali",
-    email: "hello@gmail.com",
-    role: "admin",
-    numberOfOrders: 5,
-  },
-  {
-    id: 3,
-    firstName: "ali",
-    lastName: "ahmad",
-    email: "hello@gmail.com",
-    role: "admin",
-    numberOfOrders: 5,
-  },
-  {
-    id: 4,
-    firstName: "ali",
-    lastName: "ahmad",
-    email: "hello@gmail.com",
-    role: "admin",
-    numberOfOrders: 5,
-  },
-];
 
 function Users() {
   const columns = [
@@ -188,7 +149,6 @@ function Users() {
 
   const handleDeleteUser = (id) => {
     setDialog(id);
-    console.log(id);
   };
   const deleteUser = (id) => {
     window.alert("deleted");

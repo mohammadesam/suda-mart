@@ -1,38 +1,64 @@
 import React, { useState, useEffect } from "react";
+import useFetch from "../hooks/useFetch";
 import styled from "styled-components";
 import LoadingScreen from "./LoadingScreen";
 import ErrorPage from "./ErrorPage";
 import { useParams } from "react-router-dom";
+import { add, getCart } from "../features/cartSlice";
+import { Buffer } from "buffer";
+import { useDispatch, useSelector } from "react-redux";
+import Rating from "./Rating";
 
 function ProductDetails() {
-  let { id } = useParams();
-  let [product, setProduct] = useState(null);
-  let [loading, setLoading] = useState(true);
-  let [error, setError] = useState(false);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [inCart, setInCart] = useState(false);
+  const [rating, setRating] = useState({ rate: 0, numberOfReviews: 0 });
+  let cartItems = useSelector(getCart);
+  const { data, loading, error } = useFetch(
+    `/api/dashboard/product/${id}`,
+    (product) => {
+      setInCart(checkProduct());
+
+      console.log(product.rates);
+      // when no rate available
+      if (!product.rates.length) return;
+
+      const total = product.rates.reduce((sum, rateObj) => {
+        return sum + rateObj.rating;
+      }, 0);
+      const rating = Math.round(total / product.rates.length);
+      setRating({ rate: rating, numberOfReviews: product.rates.length });
+    }
+  );
+  const product = data;
+
+  console.log(id, data);
+  function addToCart() {
+    console.log(product);
+    dispatch(add({ ...product }));
+    setInCart(true);
+  }
 
   useEffect(() => {
-    async function getProduct() {
-      if (id === undefined || id === null)
-        setError("opps some thing went wrong, please try again");
-      try {
-        let response = await fetch(`/api/dashboard/product/${id}`);
-        let productData = await response.json();
-        setProduct(productData);
-        console.log(product);
-        setLoading(false);
-      } catch (err) {
-        setError("some thing went wrong please try to reload the page");
-      }
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  function checkProduct() {
+    const productInCart = cartItems.find((item) => item.id === id);
+    if (productInCart !== undefined) {
+      return true;
+    } else {
+      return false;
     }
-    getProduct();
-  }, []);
+  }
 
   if (error) {
     return <ErrorPage />;
   } else if (loading) {
     return <LoadingScreen />;
   } else {
-    let buff = new Buffer.from(product.image.data.data);
+    let buff = Buffer.from(product.image.data.data);
     let base64Image = buff.toString("base64");
     return (
       <Container>
@@ -64,8 +90,15 @@ function ProductDetails() {
             <p className="title"> catagories </p>
             <span> {product.label || " "} </span>
           </div>
+          <div>
+            {" "}
+            <p className="title"> Rating </p>
+            <Rating rating={rating} id={id} setRating={setRating} />
+          </div>
           <ButtonsWarper>
-            <button> Add to Cart </button>
+            <button disabled={inCart} onClick={addToCart}>
+              {inCart ? "in Cart" : "Add to Cart"}
+            </button>
           </ButtonsWarper>
         </RightContainer>
       </Container>
@@ -128,5 +161,9 @@ const ButtonsWarper = styled.div`
     background: #c0770a;
     color: white;
     border: none;
+  }
+
+  button:hover {
+    opacity: 0.8;
   }
 `;

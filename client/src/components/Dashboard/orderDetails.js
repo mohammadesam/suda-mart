@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { orange, green } from "@material-ui/core/colors";
+import { Buffer } from "buffer";
 
 const useStyles = makeStyles((theme) => ({
   leftContainer: {

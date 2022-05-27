@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getProducts } from "../../features/productsSlice";
 import styled from "styled-components";
 import DashboardSidebar from "./DashboardSidebar";
-import StaticCard from "./StaticCard";
 import AddProduct from "./AddProduct";
 import Container from "@material-ui/core/Container";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
@@ -20,6 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import EditIcon from "@material-ui/icons/Edit";
 import UpdateProduct from "./UpdateProduct";
 import { Link } from "react-router-dom";
+
 const useStyle = makeStyles((theme) => ({
   root: {
     color: theme.palette.primary.main,

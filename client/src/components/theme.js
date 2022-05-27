@@ -21,14 +21,14 @@ export const DefaultThemeStyled = {
   primary: "#fff",
   secondary: "#5C54B7",
   action: "#FD4056",
-  contrast: "#fff",
+  contrast: "#000",
 };
 
 export const DarkThemeStyled = {
   primary: "#323757",
   secondary: "#fff",
   action: "#FD4056",
-  contrast: "#000",
+  contrast: "#fff",
 };
 
 export const DarkDefaultTheme = createTheme({

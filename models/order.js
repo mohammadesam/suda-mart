@@ -6,6 +6,7 @@ const orderSchema = new mongoose.Schema({
   status: String,
   user: String,
   total: Number,
+  shippingCost: Number,
   date: mongoose.Schema.Types.Date,
 });
 

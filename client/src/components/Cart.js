@@ -4,13 +4,13 @@ import CartItem from "./CartItem";
 import { getAmount, getCart } from "../features/cartSlice";
 import { changeAmount } from "../features/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { useNavigate  } from "react-router";
 
 let myStorage = localStorage;
 
 function Cart() {
   const dispatch = useDispatch(changeAmount);
-  let history = useHistory();
+  let navigate = useNavigate ();
   let cart = useSelector(getCart);
   const totalAmount = useSelector(getAmount);
   let totalPrice = cart.reduce(
@@ -26,7 +26,7 @@ function Cart() {
 
   function handleBuyNow() {
     if (totalPrice <= 0) return;
-    history.push(`checkout/${totalPrice}`);
+    navigate(`/checkout/${totalPrice}`);
   }
 
   return (

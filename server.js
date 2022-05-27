@@ -8,6 +8,7 @@ const userRouter = require("./routes/users");
 const dashboardRoute = require("./routes/dashboard");
 const orderRouter = require("./routes/orders");
 const staticsRoute = require("./routes/statics");
+const appRouter = require("./routes/app");
 const cors = require("cors");
 const user = require("./models/user");
 const bcrypt = require("bcrypt");
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // passport initialize
 app.use(
@@ -84,6 +85,7 @@ app.use("/api/users", userRouter);
 app.use("/api/dashboard/orders", orderRouter);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/statics", staticsRoute);
+app.use("/api/settings", appRouter);
 
 //static
 app.use(express.static(path.join(__dirname, "/client/build/")));

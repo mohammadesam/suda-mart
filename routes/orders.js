@@ -20,11 +20,18 @@ function AuthorizeAdmin(req, res, next) {
 
 Router.get("/detailed/:id", async (req, res) => {
   let detailedOrders = [];
+
+  //get order data
   const orderData = await Order.findById(req.params.id);
 
+  // get user data
   let user = await Users.findOne({ _id: orderData.user });
   let products = [];
+
+  // get all products in order
   let IDArr = orderData.products.map((p) => p.id);
+
+  // get all products data
   for await (const product of Products.find({
     _id: { $in: IDArr },
   })) {
@@ -86,8 +93,8 @@ Router.get("/short", async (req, res) => {
 });
 
 Router.post("/add", (req, res) => {
-  let { user } = req.body;
-  let cart = JSON.parse(req.body.cartData);
+  let { user, shippingCost } = req.body;
+  let cart = req.body.cartData
   console.log(cart, user);
   let newOrder = new Order({
     _id: mongoose.Types.ObjectId(),
@@ -101,6 +108,7 @@ Router.post("/add", (req, res) => {
       (sum, product) => (sum += product.price * product.quantity),
       0
     ),
+    shippingCost,
     date: new Date().getTime(),
   });
 
@@ -130,15 +138,15 @@ Router.post("/add", (req, res) => {
           console.log("user orders number updated");
         });
         // update user number of orders
-        Products.findOneAndUpdate(
-          { _id: product._id },
-          {
-            $inc: { numberOfOrders: product.quantity },
-          },
-          { useFindAndModify: false }
-        ).then(() => {
-          console.log("product orders number updated");
-        });
+        // Products.findOneAndUpdate(
+        //   { _id: product._id },
+        //   {
+        //     $inc: { numberOfOrders: product.quantity },
+        //   },
+        //   { useFindAndModify: false }
+        // ).then(() => {
+        //   console.log("product orders number updated");
+        // });
       });
       res.send("saved");
     })

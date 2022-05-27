@@ -3,7 +3,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { DefaultTheme } from "../theme";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Chip from "@material-ui/core/Chip";
 import { List } from "@material-ui/icons";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 function NormalUser() {
   let user = useSelector(getUser);
   let classes = useStyles(DefaultTheme);
-  let history = useHistory();
+  let navigate = useNavigate();
   let [orders, setOrders] = useState([]);
   let [loading, setLoading] = useState(true);
   let [error, setError] = useState(null);
@@ -105,7 +105,7 @@ function NormalUser() {
   }, [user]);
 
   let handleGoBack = () => {
-    history.push("/");
+    navigate("/", { replace: true });
   };
 
   const openDetailsMenu = (id) => {
@@ -123,6 +123,10 @@ function NormalUser() {
     );
   } else if (error) {
     return <ErrorPage />;
+  }
+
+  if(!user) {
+    return <ErrorPage />
   }
   return (
     <Container className={classes.root}>
@@ -144,7 +148,7 @@ function NormalUser() {
             <Typography className={classes.orderLabel}> Orders </Typography>
           </div>
           <Typography variant="h5" classes>
-            Total Spent: {" $" + Math.round(totalPaid *100) / 100}
+            Total Spent: {" $" + Math.round(totalPaid * 100) / 100}
           </Typography>
         </Container>
 
