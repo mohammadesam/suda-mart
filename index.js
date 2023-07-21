@@ -174,11 +174,17 @@ app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
   });
 });
 
-if (process.env.NODE_ENV === "production") {
-  app.get("*", (req, res) => {
-    res.sendFile("index.html");
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "client/build/index.html"), function (err) {
+    if (err) {
+      res.status(500).send(err);
+    }
   });
-}
+});
+
+// app.get("*", (req, res) => {
+//   res.sendFile("index.html");
+// });
 
 const port = process.env.PORT || 3500;
 app.listen(port, console.log(`listing at port ${port}`));
