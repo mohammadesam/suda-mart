@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200mm"
+   height="40mm"
+   viewBox="0 0 200 40"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="SudaMartLogo.svg">
+  <defs
+     id="defs2">
+    <rect
+       x="145.8988"
+       y="32.505951"
+       width="251.73215"
+       height="76.351189"
+       id="rect52" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="129.77359"
+     inkscape:cy="560"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1268"
+     inkscape:window-height="728"
+     inkscape:window-x="25"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       id="text50"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect52);fill:#085d55;fill-opacity:1;stroke:none;"
+       transform="matrix(1.0023843,0,0,1.3635115,-87.90392,-40.254967)"><tspan
+         x="145.89844"
+         y="56.773093"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:28.2222px;font-family:Aharoni;-inkscape-font-specification:'Aharoni, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#085d55;fill-opacity:1">Suda Mart</tspan></tspan></text>
+    <path
+       style="opacity:0.999;fill:#085d55;fill-opacity:1;stroke:#c0770a;stroke-width:0;stroke-miterlimit:4.2;stroke-dasharray:none"
+       d="m 7.2646356,37.562636 c -0.914063,-0.914064 -1.69101,-3.61425 -2.338299,-8.126489 -1.346043,-9.383237 -1.523552,-9.967099 -3.160385,-10.39514 -1.75266803,-0.458334 -1.93238503,-3.196305 -0.252124,-3.841081 0.657665,-0.25237 2.613692,-0.462663 4.346726,-0.467317 3.046403,-0.0082 3.32196,-0.222842 8.3034984,-6.4684513 2.833891,-3.552992 5.644697,-6.648849 6.246233,-6.87968 1.074153,-0.41219099 3.342309,0.931789 3.342309,1.980462 0,0.293689 -1.895483,2.973465 -4.212186,5.955056 l -4.212186,5.4210763 h 11.393733 c 6.266555,0 11.393736,-0.260058 11.393736,-0.577905 0,-0.317848 -1.754471,-2.746226 -3.898823,-5.3963963 -3.065354,-3.788421 -3.734848,-5.078907 -3.131773,-6.036678 1.630365,-2.58925999 3.152437,-1.678821 8.629949,5.162071 l 5.483929,6.8489083 h 3.547345 c 2.217467,0 3.897151,0.421492 4.48043,1.124301 1.1347,1.367231 0.482862,3.411413 -1.08781,3.411413 -1.264582,0 -1.354688,0.316712 -3.010985,10.583332 -0.789877,4.89607 -1.56962,7.482269 -2.45015,8.126489 -0.949412,0.694616 -6.159629,0.944941 -19.667908,0.944941 -16.728562,0 -18.4990964,-0.122748 -19.7452594,-1.368912 z M 19.216881,26.847276 c 0,-4.87839 -0.24072,-6.118173 -1.303396,-6.712876 -0.82684,-0.462723 -1.794225,-0.466733 -2.645833,-0.01097 -1.953882,1.045687 -1.986709,12.324816 -0.03905,13.414785 0.82684,0.462725 1.794226,0.466733 2.645833,0.01098 1.11237,-0.595321 1.342441,-1.743917 1.342441,-6.701909 z m 10.583334,0 c 0,-4.87839 -0.24072,-6.118173 -1.303396,-6.712876 -0.826841,-0.462723 -1.794226,-0.466733 -2.645833,-0.01097 -1.953884,1.045687 -1.986709,12.324816 -0.03905,13.414785 0.826841,0.462725 1.794227,0.466733 2.645833,0.01098 1.112372,-0.595321 1.342443,-1.743917 1.342443,-6.701909 z m 10.583333,0 c 0,-4.87839 -0.24072,-6.118173 -1.303395,-6.712876 -0.826842,-0.462723 -1.794227,-0.466733 -2.645834,-0.01097 -1.953884,1.045687 -1.986708,12.324816 -0.03905,13.414785 0.826842,0.462725 1.794227,0.466733 2.645833,0.01098 1.112372,-0.595321 1.342443,-1.743917 1.342443,-6.701909 z"
+       id="path1535" />
+  </g>
+</svg>

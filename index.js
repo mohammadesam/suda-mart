@@ -88,7 +88,7 @@ app.use("/api/statics", staticsRoute);
 app.use("/api/settings", appRouter);
 
 //static
-app.use(express.static(path.join(__dirname, "/client/build/")));
+app.use(express.static(path.join(__dirname, "build")));
 //db
 mongoose.connect(process.env.DATA_BASE_URL, {
   useNewUrlParser: true,
@@ -175,7 +175,7 @@ app.post("/api/makeOrder", checkAuthentication, async (req, res) => {
 });
 
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "client/build/index.html"), function (err) {
+  res.sendFile(path.join(__dirname, "build/index.html"), function (err) {
     if (err) {
       res.status(500).send(err);
     }
